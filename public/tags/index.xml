@@ -2,152 +2,152 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on The Tarkus Factory</title>
-    <link>https://smigle-hugo-theme.netlify.app/tags/</link>
+    <link>https://indymnv.dev/tags/</link>
     <description>Recent content in Tags on The Tarkus Factory</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 14 Feb 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://smigle-hugo-theme.netlify.app/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 14 Feb 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://indymnv.dev/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>free software</title>
-      <link>https://smigle-hugo-theme.netlify.app/tags/free-software/</link>
+      <link>https://indymnv.dev/tags/free-software/</link>
       <pubDate>Wed, 14 Feb 2024 00:00:00 +0000</pubDate>
       
-      <guid>https://smigle-hugo-theme.netlify.app/tags/free-software/</guid>
+      <guid>https://indymnv.dev/tags/free-software/</guid>
       <description></description>
     </item>
     
     <item>
       <title>linux</title>
-      <link>https://smigle-hugo-theme.netlify.app/tags/linux/</link>
+      <link>https://indymnv.dev/tags/linux/</link>
       <pubDate>Wed, 14 Feb 2024 00:00:00 +0000</pubDate>
       
-      <guid>https://smigle-hugo-theme.netlify.app/tags/linux/</guid>
+      <guid>https://indymnv.dev/tags/linux/</guid>
       <description></description>
     </item>
     
     <item>
       <title>sway</title>
-      <link>https://smigle-hugo-theme.netlify.app/tags/sway/</link>
+      <link>https://indymnv.dev/tags/sway/</link>
       <pubDate>Wed, 14 Feb 2024 00:00:00 +0000</pubDate>
       
-      <guid>https://smigle-hugo-theme.netlify.app/tags/sway/</guid>
+      <guid>https://indymnv.dev/tags/sway/</guid>
       <description></description>
     </item>
     
     <item>
       <title>privacy</title>
-      <link>https://smigle-hugo-theme.netlify.app/tags/privacy/</link>
+      <link>https://indymnv.dev/tags/privacy/</link>
       <pubDate>Fri, 19 Jan 2024 00:00:00 +0000</pubDate>
       
-      <guid>https://smigle-hugo-theme.netlify.app/tags/privacy/</guid>
+      <guid>https://indymnv.dev/tags/privacy/</guid>
       <description></description>
     </item>
     
     <item>
       <title>blogging</title>
-      <link>https://smigle-hugo-theme.netlify.app/tags/blogging/</link>
+      <link>https://indymnv.dev/tags/blogging/</link>
       <pubDate>Thu, 10 Aug 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://smigle-hugo-theme.netlify.app/tags/blogging/</guid>
+      <guid>https://indymnv.dev/tags/blogging/</guid>
       <description></description>
     </item>
     
     <item>
       <title>julia</title>
-      <link>https://smigle-hugo-theme.netlify.app/tags/julia/</link>
+      <link>https://indymnv.dev/tags/julia/</link>
       <pubDate>Thu, 10 Aug 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://smigle-hugo-theme.netlify.app/tags/julia/</guid>
+      <guid>https://indymnv.dev/tags/julia/</guid>
       <description></description>
     </item>
     
     <item>
       <title>web development</title>
-      <link>https://smigle-hugo-theme.netlify.app/tags/web-development/</link>
+      <link>https://indymnv.dev/tags/web-development/</link>
       <pubDate>Thu, 10 Aug 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://smigle-hugo-theme.netlify.app/tags/web-development/</guid>
+      <guid>https://indymnv.dev/tags/web-development/</guid>
       <description></description>
     </item>
     
     <item>
       <title>data science</title>
-      <link>https://smigle-hugo-theme.netlify.app/tags/data-science/</link>
+      <link>https://indymnv.dev/tags/data-science/</link>
       <pubDate>Tue, 04 Jul 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://smigle-hugo-theme.netlify.app/tags/data-science/</guid>
+      <guid>https://indymnv.dev/tags/data-science/</guid>
       <description></description>
     </item>
     
     <item>
       <title>python</title>
-      <link>https://smigle-hugo-theme.netlify.app/tags/python/</link>
+      <link>https://indymnv.dev/tags/python/</link>
       <pubDate>Tue, 04 Jul 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://smigle-hugo-theme.netlify.app/tags/python/</guid>
+      <guid>https://indymnv.dev/tags/python/</guid>
       <description></description>
     </item>
     
     <item>
       <title>r</title>
-      <link>https://smigle-hugo-theme.netlify.app/tags/r/</link>
+      <link>https://indymnv.dev/tags/r/</link>
       <pubDate>Tue, 04 Jul 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://smigle-hugo-theme.netlify.app/tags/r/</guid>
+      <guid>https://indymnv.dev/tags/r/</guid>
       <description></description>
     </item>
     
     <item>
       <title>tmux</title>
-      <link>https://smigle-hugo-theme.netlify.app/tags/tmux/</link>
+      <link>https://indymnv.dev/tags/tmux/</link>
       <pubDate>Tue, 04 Jul 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://smigle-hugo-theme.netlify.app/tags/tmux/</guid>
+      <guid>https://indymnv.dev/tags/tmux/</guid>
       <description></description>
     </item>
     
     <item>
       <title>tooling</title>
-      <link>https://smigle-hugo-theme.netlify.app/tags/tooling/</link>
+      <link>https://indymnv.dev/tags/tooling/</link>
       <pubDate>Tue, 04 Jul 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://smigle-hugo-theme.netlify.app/tags/tooling/</guid>
+      <guid>https://indymnv.dev/tags/tooling/</guid>
       <description></description>
     </item>
     
     <item>
       <title>vim</title>
-      <link>https://smigle-hugo-theme.netlify.app/tags/vim/</link>
+      <link>https://indymnv.dev/tags/vim/</link>
       <pubDate>Tue, 04 Jul 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://smigle-hugo-theme.netlify.app/tags/vim/</guid>
+      <guid>https://indymnv.dev/tags/vim/</guid>
       <description></description>
     </item>
     
     <item>
       <title>eda</title>
-      <link>https://smigle-hugo-theme.netlify.app/tags/eda/</link>
+      <link>https://indymnv.dev/tags/eda/</link>
       <pubDate>Thu, 02 Mar 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://smigle-hugo-theme.netlify.app/tags/eda/</guid>
+      <guid>https://indymnv.dev/tags/eda/</guid>
       <description></description>
     </item>
     
     <item>
       <title>time series</title>
-      <link>https://smigle-hugo-theme.netlify.app/tags/time-series/</link>
+      <link>https://indymnv.dev/tags/time-series/</link>
       <pubDate>Thu, 02 Mar 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://smigle-hugo-theme.netlify.app/tags/time-series/</guid>
+      <guid>https://indymnv.dev/tags/time-series/</guid>
       <description></description>
     </item>
     
     <item>
       <title>web scraping</title>
-      <link>https://smigle-hugo-theme.netlify.app/tags/web-scraping/</link>
+      <link>https://indymnv.dev/tags/web-scraping/</link>
       <pubDate>Thu, 15 Dec 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://smigle-hugo-theme.netlify.app/tags/web-scraping/</guid>
+      <guid>https://indymnv.dev/tags/web-scraping/</guid>
       <description></description>
     </item>
     

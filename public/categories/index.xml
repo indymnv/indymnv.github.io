@@ -2,44 +2,44 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on The Tarkus Factory</title>
-    <link>https://smigle-hugo-theme.netlify.app/categories/</link>
+    <link>https://indymnv.dev/categories/</link>
     <description>Recent content in Categories on The Tarkus Factory</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 14 Feb 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://smigle-hugo-theme.netlify.app/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 14 Feb 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://indymnv.dev/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>technology</title>
-      <link>https://smigle-hugo-theme.netlify.app/categories/technology/</link>
+      <link>https://indymnv.dev/categories/technology/</link>
       <pubDate>Wed, 14 Feb 2024 00:00:00 +0000</pubDate>
       
-      <guid>https://smigle-hugo-theme.netlify.app/categories/technology/</guid>
+      <guid>https://indymnv.dev/categories/technology/</guid>
       <description></description>
     </item>
     
     <item>
       <title>slice of life</title>
-      <link>https://smigle-hugo-theme.netlify.app/categories/slice-of-life/</link>
+      <link>https://indymnv.dev/categories/slice-of-life/</link>
       <pubDate>Thu, 21 Sep 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://smigle-hugo-theme.netlify.app/categories/slice-of-life/</guid>
+      <guid>https://indymnv.dev/categories/slice-of-life/</guid>
       <description></description>
     </item>
     
     <item>
       <title>programming</title>
-      <link>https://smigle-hugo-theme.netlify.app/categories/programming/</link>
+      <link>https://indymnv.dev/categories/programming/</link>
       <pubDate>Thu, 10 Aug 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://smigle-hugo-theme.netlify.app/categories/programming/</guid>
+      <guid>https://indymnv.dev/categories/programming/</guid>
       <description></description>
     </item>
     
     <item>
       <title>quantitative methods</title>
-      <link>https://smigle-hugo-theme.netlify.app/categories/quantitative-methods/</link>
+      <link>https://indymnv.dev/categories/quantitative-methods/</link>
       <pubDate>Thu, 02 Mar 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://smigle-hugo-theme.netlify.app/categories/quantitative-methods/</guid>
+      <guid>https://indymnv.dev/categories/quantitative-methods/</guid>
       <description></description>
     </item>
     

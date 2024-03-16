@@ -1,4 +1,4 @@
-baseURL = "https://smigle-hugo-theme.netlify.app/"
+baseURL = "https://indymnv.dev/"
 languageCode = "en-us"
 theme = "smigle"
 title = "The Tarkus Factory"

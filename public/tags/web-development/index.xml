@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>web development on The Tarkus Factory</title>
-    <link>https://smigle-hugo-theme.netlify.app/tags/web-development/</link>
+    <link>https://indymnv.dev/tags/web-development/</link>
     <description>Recent content in web development on The Tarkus Factory</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 10 Aug 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://smigle-hugo-theme.netlify.app/tags/web-development/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 10 Aug 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://indymnv.dev/tags/web-development/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Creating your own blog with Julia and Franklin</title>
-      <link>https://smigle-hugo-theme.netlify.app/posts/006_build_blog/</link>
+      <link>https://indymnv.dev/posts/006_build_blog/</link>
       <pubDate>Thu, 10 Aug 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://smigle-hugo-theme.netlify.app/posts/006_build_blog/</guid>
+      <guid>https://indymnv.dev/posts/006_build_blog/</guid>
       <description>In this post, we are going to discuss how to build your own blog with Julia and Franklin.jl, a popular static site generator among Julia users who create their own blogs or even build websites for tutorials. I hope that if you are reading this entry and you don&amp;rsquo;t have your own space, it can motivate you to build your own website.
 Some Reasons to Create Your Own Blog Blogs may sound old-fashioned, something created by people who are still living in the 90s, typing with passion about the political system while listening to Soundgarden in the background and drinking some kind of cheap beer&amp;hellip; or programmers.</description>
     </item>
