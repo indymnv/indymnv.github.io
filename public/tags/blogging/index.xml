@@ -2,27 +2,27 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>blogging on The Tarkus Factory</title>
-    <link>https://indymnv.dev/tags/blogging/</link>
+    <link>https://smigle-hugo-theme.netlify.app/tags/blogging/</link>
     <description>Recent content in blogging on The Tarkus Factory</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 10 Aug 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://indymnv.dev/tags/blogging/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 10 Aug 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://smigle-hugo-theme.netlify.app/tags/blogging/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Creating your own blog with Julia and Franklin</title>
-      <link>https://indymnv.dev/posts/006_build_blog/</link>
+      <link>https://smigle-hugo-theme.netlify.app/posts/006_build_blog/</link>
       <pubDate>Thu, 10 Aug 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://indymnv.dev/posts/006_build_blog/</guid>
+      <guid>https://smigle-hugo-theme.netlify.app/posts/006_build_blog/</guid>
       <description>In this post, we are going to discuss how to build your own blog with Julia and Franklin.jl, a popular static site generator among Julia users who create their own blogs or even build websites for tutorials. I hope that if you are reading this entry and you don&amp;rsquo;t have your own space, it can motivate you to build your own website.
 Some Reasons to Create Your Own Blog Blogs may sound old-fashioned, something created by people who are still living in the 90s, typing with passion about the political system while listening to Soundgarden in the background and drinking some kind of cheap beer&amp;hellip; or programmers.</description>
     </item>
     
     <item>
       <title>Why have I decided to open a blog?</title>
-      <link>https://indymnv.dev/posts/001_publish/</link>
+      <link>https://smigle-hugo-theme.netlify.app/posts/001_publish/</link>
       <pubDate>Wed, 05 Oct 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://indymnv.dev/posts/001_publish/</guid>
+      <guid>https://smigle-hugo-theme.netlify.app/posts/001_publish/</guid>
       <description>Introduction The purpose of starting this blog is to create a space where I can write about topics that interest me related to technology, the world of quantitative methods for decision making, programming, among others.
 But why create a blog, if there are so many spaces out there that are more convenient than building one? The truth is, I wanted to have a more independent space and not too comfortable on third parties (nor benefit them), although there are spaces like Twitter (which seems to be in greater decline every day) or Medium, I simply thought that the best thing I could do is to have a personal space, and given that the dream of owning a house seems to be increasingly distant for my generation, well at least I can settle for having a blog, right?</description>
     </item>

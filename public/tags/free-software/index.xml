@@ -2,36 +2,36 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>free software on The Tarkus Factory</title>
-    <link>https://indymnv.dev/tags/free-software/</link>
+    <link>https://smigle-hugo-theme.netlify.app/tags/free-software/</link>
     <description>Recent content in free software on The Tarkus Factory</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 14 Feb 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://indymnv.dev/tags/free-software/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 14 Feb 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://smigle-hugo-theme.netlify.app/tags/free-software/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Sway: The brief introduction to tiling window managers</title>
-      <link>https://indymnv.dev/posts/2024_02_14_swaywm/</link>
+      <link>https://smigle-hugo-theme.netlify.app/posts/2024_02_14_swaywm/</link>
       <pubDate>Wed, 14 Feb 2024 00:00:00 +0000</pubDate>
       
-      <guid>https://indymnv.dev/posts/2024_02_14_swaywm/</guid>
+      <guid>https://smigle-hugo-theme.netlify.app/posts/2024_02_14_swaywm/</guid>
       <description>I can&amp;rsquo;t lie to you that I&amp;rsquo;ve had some free time these days, which I&amp;rsquo;ve taken advantage of to learn about GNU/Linux Desktop. By installing it on two laptops, I&amp;rsquo;ve been able to learn about the kernel and the Ubuntu and Fedora operating systems. However, when I began my journey, I was playing in a safe environment like GNOME, this window manager that provides almost all the tools you need to start without having to tinker too much.</description>
     </item>
     
     <item>
       <title>Finding comfort in the GNU/Linux Desktop</title>
-      <link>https://indymnv.dev/posts/2024_01_16_linux_experience/</link>
+      <link>https://smigle-hugo-theme.netlify.app/posts/2024_01_16_linux_experience/</link>
       <pubDate>Fri, 19 Jan 2024 00:00:00 +0000</pubDate>
       
-      <guid>https://indymnv.dev/posts/2024_01_16_linux_experience/</guid>
+      <guid>https://smigle-hugo-theme.netlify.app/posts/2024_01_16_linux_experience/</guid>
       <description>I have been a Windows user for most of my life, and for a little over two years, I have used MacOS; this article talks about my reasons and experiences in using GNU/Linux as an operating system, the transition, its strengths, and weaknesses.
 My first motivation is a mixture of curiosity and the desire to find a free operating system, with the same idea in mind in my previous post where I wanted to move more towards free software, the main piece was the operating system.</description>
     </item>
     
     <item>
       <title>From Mastodon to Free software: My little experience</title>
-      <link>https://indymnv.dev/posts/008_free_software/</link>
+      <link>https://smigle-hugo-theme.netlify.app/posts/008_free_software/</link>
       <pubDate>Thu, 21 Sep 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://indymnv.dev/posts/008_free_software/</guid>
+      <guid>https://smigle-hugo-theme.netlify.app/posts/008_free_software/</guid>
       <description>Introduction It has been a while since I decided to purge several of my social networks (including Twitter, Facebook, Instagram, and LinkedIn) and mainly stick to Mastodon as the only platform for interacting with people on the internet whom I don&amp;rsquo;t really know. So far, it has been a positive experience, and I have no doubts that it has improved my quality of life. Furthermore, it has opened up a world that I wasn&amp;rsquo;t very aware of and that I have become increasingly interested in: The world of Free software.</description>
     </item>
     

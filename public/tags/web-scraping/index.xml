@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>web scraping on The Tarkus Factory</title>
-    <link>https://indymnv.dev/tags/web-scraping/</link>
+    <link>https://smigle-hugo-theme.netlify.app/tags/web-scraping/</link>
     <description>Recent content in web scraping on The Tarkus Factory</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 15 Dec 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://indymnv.dev/tags/web-scraping/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 15 Dec 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://smigle-hugo-theme.netlify.app/tags/web-scraping/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>How to scrape data with Python using selenium and Pandas</title>
-      <link>https://indymnv.dev/posts/002_publish/</link>
+      <link>https://smigle-hugo-theme.netlify.app/posts/002_publish/</link>
       <pubDate>Thu, 15 Dec 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://indymnv.dev/posts/002_publish/</guid>
+      <guid>https://smigle-hugo-theme.netlify.app/posts/002_publish/</guid>
       <description>Introduction In this tutorial, I will dedicate myself to explaining how web scraping can be done from a platform where a dynamic interaction of the web application is required, this is quite useful when obtaining data from different links within the platform and where it is necessary a management scheme of the front-end components to carry it out.
 Here there are mainly two essential libraries, the first is selenium which corresponds to a framework that operates for multiple languages and serves to automate and control the browser, while Pandas for data manipulation will allow us to read data tables directly.</description>
     </item>

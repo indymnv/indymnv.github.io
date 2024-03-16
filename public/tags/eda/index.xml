@@ -2,27 +2,27 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>eda on The Tarkus Factory</title>
-    <link>https://indymnv.dev/tags/eda/</link>
+    <link>https://smigle-hugo-theme.netlify.app/tags/eda/</link>
     <description>Recent content in eda on The Tarkus Factory</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 02 Mar 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://indymnv.dev/tags/eda/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 02 Mar 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://smigle-hugo-theme.netlify.app/tags/eda/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Using evotrees.jl for time series prediction</title>
-      <link>https://indymnv.dev/posts/003_publish/</link>
+      <link>https://smigle-hugo-theme.netlify.app/posts/003_publish/</link>
       <pubDate>Thu, 02 Mar 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://indymnv.dev/posts/003_publish/</guid>
+      <guid>https://smigle-hugo-theme.netlify.app/posts/003_publish/</guid>
       <description>Introduction In this post, I want to show an analysis of a time series that I&amp;rsquo;ve been working on. Usually, when dealing with time series, it is not so common to use machine learning algorithms (without at least trying more traditional models like the ARIMA family), but I still wanted to test how well a GBM model fits for these kinds of problems that are so popular.
 NOTE: I don&amp;rsquo;t recommend starting with models of this type for time series problems.</description>
     </item>
     
     <item>
       <title>World Happiness Report - EDA &amp; clustering with Julia</title>
-      <link>https://indymnv.dev/posts/005_happines/</link>
+      <link>https://smigle-hugo-theme.netlify.app/posts/005_happines/</link>
       <pubDate>Wed, 23 Nov 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://indymnv.dev/posts/005_happines/</guid>
+      <guid>https://smigle-hugo-theme.netlify.app/posts/005_happines/</guid>
       <description>The purpose of this post is to show Julia as a language for data analysis and Machine Learning. Sadly Kaggle does not support Julia Kernels (hopefully, they will add it in the future). Therefore I wanted to take advantage of this space to show a reimplementation of Python/R Notebooks to Julia. In this context, I took data on happiness in countries in 2021 and some factors considered in this exciting survey.</description>
     </item>
     
