@@ -46,6 +46,7 @@ brandIconFile = "images/brandIcon.svg"
 dateFmt = "2006-01-02"
 subtitle = "Navi's Personal Blog"
 math = true
+custom_css = ["css/reset.css"]
 
   [[params.social]]
   name = "GitHub"
