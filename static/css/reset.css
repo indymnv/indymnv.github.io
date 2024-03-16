@@ -4,21 +4,21 @@ html {
 :root {
   --bgcolor: #ebdbb2;
   --dimcolor: #eee;
-  --fontcolor: #2f3237;
+  --fontcolor: #282828;
   --linkcolor: #458588;
   --visitedcolor: #83a598;
-  --precolor: #fff;
-  --prebgcolor: #000;
+  --precolor: #3c3836;
+  --prebgcolor: #ebdbb2;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-     --bgcolor: #2f3237;
+     --bgcolor: #282828;
      --dimcolor: #333;
      --fontcolor: #ebdbb2;
      --linkcolor: #83a598;
      --visitedcolor: #458588;
-     --precolor: #fff;
-     --prebgcolor: #383838;
+     --precolor: #ebdbb2;
+     --prebgcolor: #3c3836;
   }
 }
 body {
