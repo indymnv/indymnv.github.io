@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content=""
+  />
+  
+    
+      <title>Sway: The brief introduction to tiling window managers | The Tarkus Factory</title>
+    
+  
+  <link rel="stylesheet" href="/css/reset.css"/>
+  <link rel="stylesheet" href="/css/font.css"/>
+  <link rel="stylesheet" href="/css/smigle.css"/>
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+</head>
+
+  <body>
+    <div id="root">
+      <header>
+  <div id="brand">
+    <a class="icon-link" href="https://smigle-hugo-theme.netlify.app/">
+      <img
+        class="icon"
+        src="/images/brandIcon.svg"
+      />
+    </a>
+    <div class="text">
+      <a href="https://smigle-hugo-theme.netlify.app/"><h1>The Tarkus Factory</h1></a>
+      <h3>Navi&#39;s Personal Blog</h3>
+    </div>
+  </div>
+  <nav>
+    
+      
+        
+        <a href="/"><b>Home</b></a>
+      
+         | 
+        <a href="/about/"><b>About</b></a>
+      
+         | 
+        <a href="/posts/"><b>Posts</b></a>
+      
+         | 
+        <a href="/categories/"><b>Categories</b></a>
+      
+         | 
+        <a href="/tags/"><b>Tags</b></a>
+      
+         | 
+        <a href="/index.xml"><b>RSS</b></a>
+      
+    
+    
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: '\\[', right: '\\]', display: true},   
+        {left: '$$', right: '$$', display: true},     
+        {left: '\\(', right: '\\)', display: false},  
+      ],
+      throwOnError : false
+    });
+  });
+</script>
+
+
+
+  
+  </nav>
+  <hr />
+</header>
+
+      <div id="content">
+        
+  <main>
+    <article>
+      <h1 class="title">Sway: The brief introduction to tiling window managers</h1>
+      
+      <div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2024-02-14</time>
+    <span>in</span>
+    
+      <a href="/categories/technology">Technology</a>
+  </strong>
+  <span> • 1082 words</span>
+  <span> • 6 minute read</span>
+  
+    <div>
+      Last updated on
+      <time>2024-03-16</time>
+    </div>
+  
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/tags/free-software">free software</a>, 
+        <a href="/tags/linux">linux</a>, 
+        <a href="/tags/sway">sway</a>
+    </div>
+  
+</div>
+
+      <div class="content"><p>I can&rsquo;t lie to you that I&rsquo;ve had some free time these days, which I&rsquo;ve taken advantage of to learn about GNU/Linux Desktop. By installing it on two laptops, I&rsquo;ve been able to learn about the kernel and the Ubuntu and Fedora operating systems. However, when I began my journey, I was playing in a safe environment like GNOME, this window manager that provides almost all the tools you need to start without having to tinker too much. But well, certain people say that you also learn about Linux when you have to use a tiling window manager (twm). So, this article is to tell you about how I&rsquo;ve used a Mac M1, along with Fedora Asahi Remix, and installing Sway, a popular twm that allows you to create that fancy desktop that you can share on Reddit <a href="https://www.reddit.com/r/unixporn/">r/unixporn</a>.</p>
+<p>Let&rsquo;s go for the first rice!</p>
+<p><img src="/2024_02_14_swaywm/20240213_16h55m18s_grim.png" alt="kawaii_sway"></p>
+<h2 id="what-is-a-twm-why-is-it-popular-in-linux">What is a twm? Why is it popular (in Linux)?</h2>
+<p>It is said that there are two paradigms within the world of window managers: Stacking and Tiling. If you use Windows or MacOS, you may be familiar with the former, where basically the windows you operate for each running software can be overlapped, while the latter works on the avoidance of this (although it can be done) to take advantage of the space used by each program.</p>
+<p>Despite this, the popularity of tiling window managers is mainly due to a niche, primarily the Linux community. You can check out the famous Reddit r/unixporn where people customize their operating systems to make them aesthetically and operationally tailored to their users. It&rsquo;s worth noting that this is not exclusively a characteristic of tiling window managers, but they do have a strong representation in that environment.</p>
+<p>Finally, the reason why twms are interesting as software is that they are lightweight, highly customizable, and through the use of shortcuts, they can allow your workflow to be more efficient if you learn to use them.</p>
+<h2 id="installing-sway-and-configuring-it">Installing Sway and Configuring it.</h2>
+<p>When installing Asahi Linux on MacOS, I decided to install GNOME, which is a stacking window manager, and I was working normally within that ecosystem. Typically, this environment is quite user-friendly, with LibreOffice installed, Firefox, file management, etc.</p>
+<p>Within this environment, I decided to install a tiling window manager (twm). Initially, I wanted to install i3, which is a very popular tiling window manager with more documentation and tutorials available. However, despite my attempts to install it, I ended up failing. This was probably because GNOME was mainly working in Wayland, which is a protocol server that the Asahi Linux ecosystem was based on, while i3 is based on the X11 protocol. For this reason, I had to switch to Sway, which is a twm based on Wayland. To install it, you simply open the terminal and type:</p>
+<pre tabindex="0"><code>sudo dnf install sway
+</code></pre><p>After entering that command in the terminal, you will install the window manager. Then, you close the session or reboot your system. When you need to log in again, go to the bottom right section and select Sway from the list of window managers to start the new environment. You should notice that the screen has nothing but a new wallpaper and a top bar. From there onwards, you&rsquo;ll need to go to your configuration file located at <code>~/.config/sway/config</code> and add some configurations if needed. I personally made a few changes, for example:</p>
+<ol>
+<li>Adding layouts to switch between Spanish, English, and Japanese:</li>
+</ol>
+<pre tabindex="0"><code>input type:keyboard {
+    xkb_layout latam,us,jp
+    xkb_options grp:alt_shift_toggle
+}
+</code></pre><ol start="2">
+<li>Tab style, where I remove borders, add gaps, and use a color adjusted to the gruvbox format for focused windows:</li>
+</ol>
+<pre tabindex="0"><code>gaps inner 10
+gaps outer 10
+
+client.focused &#34;#98971A&#34; &#34;#98971A&#34; &#34;#ffffff&#34; &#34;#98971A&#34;
+font pango:monospace 0
+titlebar_padding 1
+titlebar_border_thickness 0
+</code></pre><ol start="3">
+<li>Set Audio and brightness shortcuts</li>
+</ol>
+<pre tabindex="0"><code>#Set audio 
+# Increase volume
+bindsym $mod+F12 exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+
+# Decrease volume
+bindsym $mod+F11 exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+
+# Mute/unmute
+bindsym $mod+F10 exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+
+#Set Brightness
+# F9 - Decrease brightness
+bindsym $mod+F9 exec brightnessctl s 5%+
+
+# F8 - Increase brightness
+bindsym $mod+F8 exec brightnessctl s +5%-
+</code></pre><p>This is generally some of the changes I made, trying to adjust it to my workflow, and it&rsquo;s been going quite well, to be honest.</p>
+<h2 id="shortcuts-shortcuts-shortcuts">shortcuts shortcuts shortcuts!</h2>
+<p>One of the strengths (and challenges) of working in a twm is that you quickly feel encouraged to use more shortcuts after realizing that you can open the terminal, the browser, send windows to other workspaces, and move between those workspaces. If you&rsquo;re using the Vimium extension in your browser and also use Vim for text editing, you may resonate with this way of working as it&rsquo;s quite consistent.</p>
+<p>I get the impression that twms strongly encourage working in the terminal, so you may consider installing other software to work harmoniously in this environment. Some of the software I&rsquo;ve been incorporating into this environment:</p>
+<ul>
+<li>(Neo)Vim: Text editor</li>
+<li>Tmux: Terminal multiplexer</li>
+<li>Newsboat: An RSS reader</li>
+<li>Alacritty: Terminal</li>
+<li>Zsh: Unix shell</li>
+<li>Cmus: Music player</li>
+<li>Ranger: File manager</li>
+<li>htop: For system monitoring</li>
+<li>waybar: A highly customizable bar for Sway</li>
+<li>dmenu: Application launcher</li>
+</ul>
+<p>You can visit my <a href="https://codeberg.org/indymnv/.dotfiles">.dotfiles</a></p>
+<h2 id="is-it-all-worth-it">Is it all worth it?</h2>
+<p>Short and obvious answer: it depends. If you&rsquo;re someone willing to invest the time to understand and configure your system, I&rsquo;m sure it can accelerate your workflow process, and you might even enjoy working in this mode. I personally have enjoyed it, especially the way you can simply fly between different workspaces, making the experience incredibly satisfying. However, I&rsquo;ve also had some annoying moments. For example, when you want to connect your devices via Bluetooth, you&rsquo;ll have to do it in the terminal, although you can open the settings within Sway if you&rsquo;re using GNOME or KDE Plasma, but otherwise you&rsquo;ll have to figure out how to do it in the terminal. Similarly, if you want to connect to Wi-Fi or take a screenshot, these small things that are so simple in general in other systems with a GUI can be a bit annoying to perform in the terminal or try to build your own shortcut in a config file. So, things that you had very well resolved before, you now have to rethink.</p>
+<p>Likewise, if you&rsquo;re not someone who is really interested in delving into config files and prefers just navigating with your mouse within a GUI, then simply stick with GNOME or KDE or any other stacking window manager. Although I would still recommend installing a twm at least once to experience it.</p>
+</div>
+    </article>
+  </main>
+
+<section class="webring">
+  <h3>Articles from blogs I follow around the net</h3>
+  <section class="articles">
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://dm13450.github.io/2024/03/09/Calibrating-an-Ornstein-Uhlenbeck-Process.html" target="_blank" rel="noopener">Calibrating an Ornstein–Uhlenbeck Process</a>
+      </h4>
+      <p class="summary" dir="auto">Read enough quant finance papers or books and you’ll come across the Ornstein–Uhlenbeck (OU) process. This is a post that explores the OU process, the equations, how we can simulate such a process and then estimate the parameters.</p>
+      <small class="source">
+        via <a href="https://dm13450.github.io/">Dean Markwick</a>
+      </small>
+      <small class="date">March 9, 2024</small>
+    </div>
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://jarbus.net/blog/zen-in-the-art-of-beat-saber/" target="_blank" rel="noopener">Zen in the Art of Beat Saber</a>
+      </h4>
+      <p class="summary" dir="auto">Contents: Introduction, Step away, come back later, Focus, but not too much, Generalization comes after specialization, Don’t bother if you don’t need to, Let Go
+Introduction
+
+    
+        
+    
+
+I recently read Zen in the Art of Archery, which isn’t a book abou…</p>
+      <small class="source">
+        via <a href="https://jarbus.net/">jarbus.net on </a>
+      </small>
+      <small class="date">February 22, 2024</small>
+    </div>
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://drewdevault.com/2023/12/26/2023-12-26-Prusa-is-floundering.html" target="_blank" rel="noopener">Why Prusa is floundering, and how you can avoid their fate</a>
+      </h4>
+      <p class="summary" dir="auto">Prusa is a 3D printer manufacturer which has a long history of being admired by
+the 3D printing community for high quality, open source printers. They have been
+struggling as of late, and came under criticism for making the firmware of their
+Mk4 printer non-…</p>
+      <small class="source">
+        via <a href="https://drewdevault.com">Drew DeVault&#39;s blog</a>
+      </small>
+      <small class="date">December 26, 2023</small>
+    </div>
+    
+  </section>
+  <p class="attribution">
+    Generated by
+    <a href="https://git.sr.ht/~sircmpwn/openring">openring</a>
+  </p>
+</section>
+<style>
+.webring .articles {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -0.5rem;
+}
+.webring .title {
+  margin: 0;
+}
+.webring .article {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  background: #3c3836;
+  min-width: 10rem;
+}
+.webring .summary {
+  font-size: 0.8rem;
+  flex: 1 1 0;
+}
+.webring .attribution {
+  text-align: right;
+  font-size: 0.8rem;
+  color: #555;
+}
+</style>
+
+
+      </div>
+      <footer>
+  <hr />
+  
+    <p id="social">
+      Find me around the web:
+      <br />
+      
+        
+        <a href="https://github.com/indymnv">GitHub</a>
+      
+         | 
+        <a href="https://codeberg.org/indymnv">Codeberg</a>
+      
+         | 
+        <a href="https://fosstodon.org/@indymnv">Mastodon</a>
+      
+         | 
+        <a href="https://matrix.to/#/@navi93:matrix.org">Matrix</a>
+      
+    </p>
+  
+  <p class="copyright">
+    Copyright © 2024
+    <a href="https://smigle-hugo-theme.netlify.app/"><strong>Navi</strong></a>.
+    This work is licensed under the
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> license.
+  </p>
+  <p class="builtWith">
+    Built with
+    <a href="http://www.gohugo.io/">Hugo</a>,
+    using the theme
+    <a href="https://gitlab.com/ian-s-mcb/smigle-hugo-theme">smigle</a>,
+    which was influenced by the theme
+    <a href="https://github.com/sumnerevans/smol">smol</a>.
+  </p>
+</footer>
+
+    </div>
+  </body>
+</html>

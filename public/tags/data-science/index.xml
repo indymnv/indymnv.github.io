@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>data science on The Tarkus Factory</title>
+    <link>https://smigle-hugo-theme.netlify.app/tags/data-science/</link>
+    <description>Recent content in data science on The Tarkus Factory</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 04 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://smigle-hugo-theme.netlify.app/tags/data-science/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>set up NeoVim &#43; Tmux for a Data Science Workflow with Julia</title>
+      <link>https://smigle-hugo-theme.netlify.app/posts/004_nvim/</link>
+      <pubDate>Tue, 04 Jul 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://smigle-hugo-theme.netlify.app/posts/004_nvim/</guid>
+      <description>In this post, I will provide some notes on getting started with Neovim for a Data Science Workflow. This setup is not strictly related to Julia and can also be used with Python and R. The idea is to work with a double panel structure, where one side contains your code and the other side has the REPL, which receives the snippets of code you send from the code side.</description>
+    </item>
+    
+    <item>
+      <title>Using evotrees.jl for time series prediction</title>
+      <link>https://smigle-hugo-theme.netlify.app/posts/003_publish/</link>
+      <pubDate>Thu, 02 Mar 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://smigle-hugo-theme.netlify.app/posts/003_publish/</guid>
+      <description>Introduction In this post, I want to show an analysis of a time series that I&amp;rsquo;ve been working on. Usually, when dealing with time series, it is not so common to use machine learning algorithms (without at least trying more traditional models like the ARIMA family), but I still wanted to test how well a GBM model fits for these kinds of problems that are so popular.
+NOTE: I don&amp;rsquo;t recommend starting with models of this type for time series problems.</description>
+    </item>
+    
+    <item>
+      <title>How to scrape data with Python using selenium and Pandas</title>
+      <link>https://smigle-hugo-theme.netlify.app/posts/002_publish/</link>
+      <pubDate>Thu, 15 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://smigle-hugo-theme.netlify.app/posts/002_publish/</guid>
+      <description>Introduction In this tutorial, I will dedicate myself to explaining how web scraping can be done from a platform where a dynamic interaction of the web application is required, this is quite useful when obtaining data from different links within the platform and where it is necessary a management scheme of the front-end components to carry it out.
+Here there are mainly two essential libraries, the first is selenium which corresponds to a framework that operates for multiple languages and serves to automate and control the browser, while Pandas for data manipulation will allow us to read data tables directly.</description>
+    </item>
+    
+    <item>
+      <title>World Happiness Report - EDA &amp; clustering with Julia</title>
+      <link>https://smigle-hugo-theme.netlify.app/posts/005_happines/</link>
+      <pubDate>Wed, 23 Nov 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://smigle-hugo-theme.netlify.app/posts/005_happines/</guid>
+      <description>The purpose of this post is to show Julia as a language for data analysis and Machine Learning. Sadly Kaggle does not support Julia Kernels (hopefully, they will add it in the future). Therefore I wanted to take advantage of this space to show a reimplementation of Python/R Notebooks to Julia. In this context, I took data on happiness in countries in 2021 and some factors considered in this exciting survey.</description>
+    </item>
+    
+  </channel>
+</rss>

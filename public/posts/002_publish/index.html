@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content=""
+  />
+  
+    
+      <title>How to scrape data with Python using selenium and Pandas | The Tarkus Factory</title>
+    
+  
+  <link rel="stylesheet" href="/css/reset.css"/>
+  <link rel="stylesheet" href="/css/font.css"/>
+  <link rel="stylesheet" href="/css/smigle.css"/>
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+</head>
+
+  <body>
+    <div id="root">
+      <header>
+  <div id="brand">
+    <a class="icon-link" href="https://smigle-hugo-theme.netlify.app/">
+      <img
+        class="icon"
+        src="/images/brandIcon.svg"
+      />
+    </a>
+    <div class="text">
+      <a href="https://smigle-hugo-theme.netlify.app/"><h1>The Tarkus Factory</h1></a>
+      <h3>Navi&#39;s Personal Blog</h3>
+    </div>
+  </div>
+  <nav>
+    
+      
+        
+        <a href="/"><b>Home</b></a>
+      
+         | 
+        <a href="/about/"><b>About</b></a>
+      
+         | 
+        <a href="/posts/"><b>Posts</b></a>
+      
+         | 
+        <a href="/categories/"><b>Categories</b></a>
+      
+         | 
+        <a href="/tags/"><b>Tags</b></a>
+      
+         | 
+        <a href="/index.xml"><b>RSS</b></a>
+      
+    
+    
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: '\\[', right: '\\]', display: true},   
+        {left: '$$', right: '$$', display: true},     
+        {left: '\\(', right: '\\)', display: false},  
+      ],
+      throwOnError : false
+    });
+  });
+</script>
+
+
+
+  
+  </nav>
+  <hr />
+</header>
+
+      <div id="content">
+        
+  <main>
+    <article>
+      <h1 class="title">How to scrape data with Python using selenium and Pandas</h1>
+      
+      <div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2022-12-15</time>
+    <span>in</span>
+    
+      <a href="/categories/programming">programming</a>
+  </strong>
+  <span> • 1034 words</span>
+  <span> • 5 minute read</span>
+  
+    <div>
+      Last updated on
+      <time>2024-03-16</time>
+    </div>
+  
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/tags/python">python</a>, 
+        <a href="/tags/data-science">data science</a>, 
+        <a href="/tags/web-scraping">web scraping</a>
+    </div>
+  
+</div>
+
+      <div class="content"><h2 id="introduction">Introduction</h2>
+<p>In this tutorial, I will dedicate myself to explaining how web scraping can be done from a platform where a dynamic interaction of the web application is required, this is quite useful when obtaining data from different links within the platform and where it is necessary a management scheme of the front-end components to carry it out.</p>
+<p>Here there are mainly two essential libraries, the first is selenium which corresponds to a framework that operates for multiple languages and serves to automate and control the browser, while Pandas for data manipulation will allow us to read data tables directly.</p>
+<p>Many times, the beautiful soup library is used to extract html elements from the web, but as we will see, it is not necessary to do so in this case.</p>
+<p>For this example, I am going to use the <a href="http://aplicativos.odepa.cl/recepcion-industria-lactea.do">Chilean dairy production platform</a>, this platform is used to obtain information on the production of products dairy products from different factories nationwide.</p>
+<h2 id="requirements">Requirements</h2>
+<p>To start, you must have Python installed. In my case, I am using version 3.9, you also have to have your browser (Mozilla or Chrome) secured. In this project, I will use the chrome one, but the codes should be similar to the one we are using here, then to work with selenium, you have to download the <a href="https://chromedriver.chromium.org/downloads">executable</a> that corresponds to your browser and its respective version</p>
+<p>If you use pip you can install it using:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>pip install <span style="color:#f92672">-</span>U selenium
+</span></span></code></pre></div><p>Then import the libraries.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> selenium <span style="color:#f92672">import</span> webdriver
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> pandas <span style="color:#66d9ef">as</span> pd
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> lxml
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> selenium.webdriver.support.ui <span style="color:#f92672">import</span> Select
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> sys
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> time
+</span></span></code></pre></div><p>Once you have imported the corresponding libraries, we will perform the first test with the chromedriver.exe (the one you downloaded from the selenium portal). For simplicity, I recommend having it in the same directory as this scrapper.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>driver <span style="color:#f92672">=</span> webdriver<span style="color:#f92672">.</span>Chrome(<span style="color:#e6db74">&#39;/Your/path/to/the/project/chromedriver&#39;</span>)
+</span></span><span style="display:flex;"><span>driver<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;http://aplicativos.odepa.cl/recepcion-industria-lactea.do&#34;</span>)
+</span></span></code></pre></div><p>This should allow the web page to be opened from the Chrome browser, the driver variable that we have assigned the chromedriver will drive the states of our browser. We can now add this snippet code</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>time<span style="color:#f92672">.</span>sleep(<span style="color:#ae81ff">5</span>)
+</span></span><span style="display:flex;"><span>driver<span style="color:#f92672">.</span>quit()
+</span></span></code></pre></div><p>With this, we add a timeout of 5 seconds, and with driver.quit() we close the browser. The reason for adding waiting times is that while we have to operate within the browser, either due to internet connections or latency of the web platform, we will therefore have to wait for the elements we need to be available.</p>
+<p>It is time to see how we can start interacting with the web page elements. For example, if we want to click on certain features, what we have to do is right-click on the component on the web page, place inspect and then recognize the element and how we can call it according to how it is identified, this can be by id, name, XPath, etc. I often use the XPath, which you can copy and paste into your code.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Select elements</span>
+</span></span><span style="display:flex;"><span>driver<span style="color:#f92672">.</span>find_element_by_id(<span style="color:#e6db74">&#39;tipoConsulta2&#39;</span>)<span style="color:#f92672">.</span>click()
+</span></span><span style="display:flex;"><span>driver<span style="color:#f92672">.</span>find_element_by_id(<span style="color:#e6db74">&#39;filterByRegionOrPlanta2&#39;</span>)<span style="color:#f92672">.</span>click()
+</span></span><span style="display:flex;"><span>driver<span style="color:#f92672">.</span>find_element_by_id(<span style="color:#e6db74">&#39;filterByRegionOrPlanta2&#39;</span>)<span style="color:#f92672">.</span>click()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Extract the list of years</span>
+</span></span><span style="display:flex;"><span>driver<span style="color:#f92672">.</span>find_element_by_xpath(<span style="color:#e6db74">&#39;//*[@id=&#34;divFechaDetalleMensual&#34;]/img&#39;</span>)<span style="color:#f92672">.</span>click()
+</span></span><span style="display:flex;"><span>driver<span style="color:#f92672">.</span>find_element_by_xpath(<span style="color:#e6db74">&#39;//*[@id=&#34;ui-datepicker-div&#34;]/div[1]/div/select&#39;</span>)<span style="color:#f92672">.</span>click()
+</span></span><span style="display:flex;"><span>years <span style="color:#f92672">=</span> driver<span style="color:#f92672">.</span>find_elements_by_tag_name(<span style="color:#e6db74">&#34;option&#34;</span>)
+</span></span></code></pre></div><p>Here what we have done is open the web page and make the necessary selections and filters to access the data, we end up creating a list called years, where we will have all the years available in this web application.</p>
+<p>Now with this, we can get the elements. Using the following code.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>list_years <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> year <span style="color:#f92672">in</span> years:
+</span></span><span style="display:flex;"><span>    list_years<span style="color:#f92672">.</span>append(year<span style="color:#f92672">.</span>get_attribute(<span style="color:#e6db74">&#39;value&#39;</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#here I added a filter by year which is optional (you can delete it)</span>
+</span></span><span style="display:flex;"><span>list_years <span style="color:#f92672">=</span> [element <span style="color:#66d9ef">for</span> element <span style="color:#f92672">in</span> list_years <span style="color:#66d9ef">if</span> element <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;&#39;</span> <span style="color:#f92672">and</span> int(element)<span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">2000</span>]
+</span></span></code></pre></div><p>Now we will obtain the list of elements of all the years to be able to iterate. Then if we want to get the plants, we can use the following:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Extract all the factory names:</span>
+</span></span><span style="display:flex;"><span>plantasposibles<span style="color:#f92672">=</span>driver<span style="color:#f92672">.</span>find_element_by_id(<span style="color:#e6db74">&#39;planta&#39;</span>)
+</span></span><span style="display:flex;"><span>plantasposibles<span style="color:#f92672">=</span>plantasposibles<span style="color:#f92672">.</span>find_elements_by_tag_name(<span style="color:#e6db74">&#34;option&#34;</span>)
+</span></span><span style="display:flex;"><span>valoresplantas<span style="color:#f92672">=</span>[]
+</span></span><span style="display:flex;"><span>nombresplantas<span style="color:#f92672">=</span>[]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> option <span style="color:#f92672">in</span> plantasposibles:
+</span></span><span style="display:flex;"><span>    valoresplantas<span style="color:#f92672">.</span>append(option<span style="color:#f92672">.</span>get_attribute(<span style="color:#e6db74">&#34;value&#34;</span>))
+</span></span><span style="display:flex;"><span>    nombresplantas<span style="color:#f92672">.</span>append(option<span style="color:#f92672">.</span>get_attribute(<span style="color:#e6db74">&#34;text&#34;</span>))
+</span></span></code></pre></div><p>We locate the dropdown that corresponds to the list of available plants, with this, we take the elements and build the list of plants. This will allow us to perform the following iteration:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>tabla<span style="color:#f92672">=</span>pd<span style="color:#f92672">.</span>DataFrame() <span style="color:#75715e">#Here we create the dataframe</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>driver<span style="color:#f92672">.</span>find_element_by_xpath(<span style="color:#e6db74">&#39;//*[@id=&#34;divFechaDetalleMensual&#34;]/img&#39;</span>)<span style="color:#f92672">.</span>click()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> lastyear <span style="color:#f92672">in</span> list_years:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">1</span>,len(valoresplantas)):
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">...</span>
+</span></span></code></pre></div><p>We need to start controlling the options and release the report with the data. From there, we perform reading and data extraction, this is where Pandas shines. If we remember the last double loop, what should go inside is the following.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Select options</span>
+</span></span><span style="display:flex;"><span>driver<span style="color:#f92672">.</span>execute_script(<span style="color:#e6db74">&#34;document.getElementById(&#39;planta&#39;).value=&#34;</span><span style="color:#f92672">+</span> valoresplantas[i])
+</span></span><span style="display:flex;"><span>driver<span style="color:#f92672">.</span>find_element_by_xpath(<span style="color:#e6db74">&#34;//*[@id=&#39;divFechaDetalleMensual&#39;]/img&#34;</span>)<span style="color:#f92672">.</span>click()
+</span></span><span style="display:flex;"><span>time<span style="color:#f92672">.</span>sleep(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>select<span style="color:#f92672">=</span>Select(driver<span style="color:#f92672">.</span>find_element_by_xpath(<span style="color:#e6db74">&#34;//*[@id=&#39;ui-datepicker-div&#39;]/div[1]/div/select&#34;</span>))
+</span></span><span style="display:flex;"><span>select<span style="color:#f92672">.</span>select_by_visible_text(str(lastyear))        
+</span></span><span style="display:flex;"><span>driver<span style="color:#f92672">.</span>find_element_by_xpath(<span style="color:#e6db74">&#34;//*[@id=&#39;ui-datepicker-div&#39;]/div[2]/button&#34;</span>)<span style="color:#f92672">.</span>click()
+</span></span><span style="display:flex;"><span>driver<span style="color:#f92672">.</span>find_element_by_id(<span style="color:#e6db74">&#39;fechaDetalleMensual&#39;</span>)<span style="color:#f92672">.</span>send_keys(lastyear)
+</span></span><span style="display:flex;"><span>timeout<span style="color:#f92672">=</span><span style="color:#ae81ff">15</span>
+</span></span><span style="display:flex;"><span>driver<span style="color:#f92672">.</span>find_element_by_id(<span style="color:#e6db74">&#39;btnVerInforme&#39;</span>)<span style="color:#f92672">.</span>click()
+</span></span><span style="display:flex;"><span>timeout<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">############################## PANDAS #######################################</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>prueba_html<span style="color:#f92672">=</span>driver<span style="color:#f92672">.</span>page_source
+</span></span><span style="display:flex;"><span>df <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_html(prueba_html, flavor<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;html5lib&#39;</span>)[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>df<span style="color:#f92672">=</span>df<span style="color:#f92672">.</span>drop(df<span style="color:#f92672">.</span>columns[<span style="color:#ae81ff">14</span>:<span style="color:#ae81ff">397</span>],axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>df<span style="color:#f92672">=</span>df<span style="color:#f92672">.</span>drop(df<span style="color:#f92672">.</span>index[<span style="color:#ae81ff">0</span>:<span style="color:#ae81ff">8</span>],axis<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>df<span style="color:#f92672">=</span>df<span style="color:#f92672">.</span>drop(df<span style="color:#f92672">.</span>index[<span style="color:#ae81ff">1</span>],axis<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>df<span style="color:#f92672">=</span>df<span style="color:#f92672">.</span>drop(df<span style="color:#f92672">.</span>index[<span style="color:#ae81ff">8</span>:<span style="color:#ae81ff">9</span>],axis<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>df[<span style="color:#e6db74">&#39;Year&#39;</span>]<span style="color:#f92672">=</span>lastyear
+</span></span><span style="display:flex;"><span>df[<span style="color:#e6db74">&#39;Factory_Name&#39;</span>]<span style="color:#f92672">=</span>nombresplantas[i]
+</span></span><span style="display:flex;"><span>tabla<span style="color:#f92672">=</span>pd<span style="color:#f92672">.</span>concat([tabla,df])
+</span></span></code></pre></div><p>In case it fails, which is typical when working in selenium, the try/catch options are the best to handle exceptions intelligently. Obviously, it depends a lot on the case and the nature of the project on how to use them, but here I just proceeded to close the application and operate again where it was. To summarize this point, the double loop would look like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> lastyear <span style="color:#f92672">in</span> list_years:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">1</span>,len(valoresplantas)):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">try</span>: 
+</span></span><span style="display:flex;"><span>            driver<span style="color:#f92672">.</span>execute_script(<span style="color:#e6db74">&#34;document.getElementById(&#39;planta&#39;).value=&#34;</span><span style="color:#f92672">+</span> valoresplantas[i])
+</span></span><span style="display:flex;"><span>            driver<span style="color:#f92672">.</span>find_element_by_xpath(<span style="color:#e6db74">&#34;//*[@id=&#39;divFechaDetalleMensual&#39;]/img&#34;</span>)<span style="color:#f92672">.</span>click()
+</span></span><span style="display:flex;"><span>            time<span style="color:#f92672">.</span>sleep(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>            select<span style="color:#f92672">=</span>Select(driver<span style="color:#f92672">.</span>find_element_by_xpath(<span style="color:#e6db74">&#34;//*[@id=&#39;ui-datepicker-div&#39;]/div[1]/div/select&#34;</span>))
+</span></span><span style="display:flex;"><span>            select<span style="color:#f92672">.</span>select_by_visible_text(str(lastyear))        
+</span></span><span style="display:flex;"><span>            driver<span style="color:#f92672">.</span>find_element_by_xpath(<span style="color:#e6db74">&#34;//*[@id=&#39;ui-datepicker-div&#39;]/div[2]/button&#34;</span>)<span style="color:#f92672">.</span>click()
+</span></span><span style="display:flex;"><span>            driver<span style="color:#f92672">.</span>find_element_by_id(<span style="color:#e6db74">&#39;fechaDetalleMensual&#39;</span>)<span style="color:#f92672">.</span>send_keys(lastyear)
+</span></span><span style="display:flex;"><span>            timeout<span style="color:#f92672">=</span><span style="color:#ae81ff">15</span>
+</span></span><span style="display:flex;"><span>            driver<span style="color:#f92672">.</span>find_element_by_id(<span style="color:#e6db74">&#39;btnVerInforme&#39;</span>)<span style="color:#f92672">.</span>click()
+</span></span><span style="display:flex;"><span>            timeout<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span>
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            prueba_html<span style="color:#f92672">=</span>driver<span style="color:#f92672">.</span>page_source
+</span></span><span style="display:flex;"><span>            df <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_html(prueba_html, flavor<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;html5lib&#39;</span>)[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>            df<span style="color:#f92672">=</span>df<span style="color:#f92672">.</span>drop(df<span style="color:#f92672">.</span>columns[<span style="color:#ae81ff">14</span>:<span style="color:#ae81ff">397</span>],axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>            df<span style="color:#f92672">=</span>df<span style="color:#f92672">.</span>drop(df<span style="color:#f92672">.</span>index[<span style="color:#ae81ff">0</span>:<span style="color:#ae81ff">8</span>],axis<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>            df<span style="color:#f92672">=</span>df<span style="color:#f92672">.</span>drop(df<span style="color:#f92672">.</span>index[<span style="color:#ae81ff">1</span>],axis<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>            df<span style="color:#f92672">=</span>df<span style="color:#f92672">.</span>drop(df<span style="color:#f92672">.</span>index[<span style="color:#ae81ff">8</span>:<span style="color:#ae81ff">9</span>],axis<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>            df[<span style="color:#e6db74">&#39;Year&#39;</span>]<span style="color:#f92672">=</span>lastyear
+</span></span><span style="display:flex;"><span>            df[<span style="color:#e6db74">&#39;Factory_Name&#39;</span>]<span style="color:#f92672">=</span>nombresplantas[i]
+</span></span><span style="display:flex;"><span>            tabla<span style="color:#f92672">=</span>pd<span style="color:#f92672">.</span>concat([tabla,df])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">except</span>:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">#If fail close and open up the window again</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">#driver.quit()</span>
+</span></span><span style="display:flex;"><span>            time<span style="color:#f92672">.</span>sleep(<span style="color:#ae81ff">5</span>)
+</span></span><span style="display:flex;"><span>            driver<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;http://aplicativos.odepa.cl/recepcion-industria-lactea.do&#34;</span>)
+</span></span><span style="display:flex;"><span>            time<span style="color:#f92672">.</span>sleep(<span style="color:#ae81ff">5</span>)
+</span></span><span style="display:flex;"><span>            driver<span style="color:#f92672">.</span>find_element_by_id(<span style="color:#e6db74">&#39;tipoConsulta2&#39;</span>)<span style="color:#f92672">.</span>click()
+</span></span><span style="display:flex;"><span>            driver<span style="color:#f92672">.</span>find_element_by_id(<span style="color:#e6db74">&#39;filterByRegionOrPlanta2&#39;</span>)<span style="color:#f92672">.</span>click()
+</span></span><span style="display:flex;"><span>            driver<span style="color:#f92672">.</span>find_element_by_id(<span style="color:#e6db74">&#39;filterByRegionOrPlanta2&#39;</span>)<span style="color:#f92672">.</span>click()
+</span></span></code></pre></div><h2 id="final-steps-with-pandas">Final steps with Pandas</h2>
+<p>With this, we would be finishing the process, the only thing left is to integrate the final data with some extra elements and save the dataframe. We will ensure that each component is integrated with its period since the months are in columns, so we will make a single column that contains them.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>tabla<span style="color:#f92672">=</span>tabla[[<span style="color:#e6db74">&#39;Year&#39;</span>, <span style="color:#e6db74">&#39;Factory_Name&#39;</span>, <span style="color:#e6db74">&#39;Product&#39;</span>, <span style="color:#e6db74">&#39;Unit&#39;</span>,<span style="color:#e6db74">&#39;Jan&#39;</span>,<span style="color:#e6db74">&#39;Feb&#39;</span>,<span style="color:#e6db74">&#39;Mar&#39;</span>,<span style="color:#e6db74">&#39;Apr&#39;</span>,<span style="color:#e6db74">&#39;May&#39;</span>,<span style="color:#e6db74">&#39;Jun&#39;</span>,<span style="color:#e6db74">&#39;Jul&#39;</span>,<span style="color:#e6db74">&#39;Aug&#39;</span>,<span style="color:#e6db74">&#39;Sep&#39;</span>,<span style="color:#e6db74">&#39;Oct&#39;</span>,<span style="color:#e6db74">&#39;Nov&#39;</span>,<span style="color:#e6db74">&#39;Dec&#39;</span>]]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>lista<span style="color:#f92672">=</span>range(len(tabla<span style="color:#f92672">.</span>index))
+</span></span><span style="display:flex;"><span>tabla<span style="color:#f92672">.</span>index<span style="color:#f92672">=</span>lista
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>tablafinal<span style="color:#f92672">=</span>pd<span style="color:#f92672">.</span>DataFrame()
+</span></span><span style="display:flex;"><span>tablaparcial<span style="color:#f92672">=</span>tabla<span style="color:#f92672">.</span>drop(tabla<span style="color:#f92672">.</span>columns[<span style="color:#ae81ff">4</span>:],axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> month <span style="color:#f92672">in</span> tabla<span style="color:#f92672">.</span>columns[<span style="color:#ae81ff">4</span>:len(tabla<span style="color:#f92672">.</span>columns)]:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    tablaparcial[<span style="color:#e6db74">&#39;Month&#39;</span>]<span style="color:#f92672">=</span>month
+</span></span><span style="display:flex;"><span>    tablaparcial[<span style="color:#e6db74">&#39;Quantity&#39;</span>]<span style="color:#f92672">=</span>tabla[month]
+</span></span><span style="display:flex;"><span>    tablafinal<span style="color:#f92672">=</span>pd<span style="color:#f92672">.</span>concat([tablafinal,tablaparcial])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>tablafinal<span style="color:#f92672">.</span>to_csv(<span style="color:#e6db74">&#34;data.csv&#34;</span>, index <span style="color:#f92672">=</span> <span style="color:#66d9ef">False</span>)
+</span></span></code></pre></div><p>Finally, we can do the extraction and a simple preprocessing to leave them more prepared for some analysis or save them to a database.</p>
+<h2 id="conclusions">Conclusions</h2>
+<p>In this project, we show how we can perform scrapping using selenium and pandas, this of course, can be done thanks to the pandas tools to extract data from HTML, simplifying the extraction. Selenium is an excellent tool to carry out this automation and test web pages, so I recommend it for the design of web apps, for example,  failures in the results or scenarios where there are possible bugs.</p>
+</div>
+    </article>
+  </main>
+
+<section class="webring">
+  <h3>Articles from blogs I follow around the net</h3>
+  <section class="articles">
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://dm13450.github.io/2024/03/09/Calibrating-an-Ornstein-Uhlenbeck-Process.html" target="_blank" rel="noopener">Calibrating an Ornstein–Uhlenbeck Process</a>
+      </h4>
+      <p class="summary" dir="auto">Read enough quant finance papers or books and you’ll come across the Ornstein–Uhlenbeck (OU) process. This is a post that explores the OU process, the equations, how we can simulate such a process and then estimate the parameters.</p>
+      <small class="source">
+        via <a href="https://dm13450.github.io/">Dean Markwick</a>
+      </small>
+      <small class="date">March 9, 2024</small>
+    </div>
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://jarbus.net/blog/zen-in-the-art-of-beat-saber/" target="_blank" rel="noopener">Zen in the Art of Beat Saber</a>
+      </h4>
+      <p class="summary" dir="auto">Contents: Introduction, Step away, come back later, Focus, but not too much, Generalization comes after specialization, Don’t bother if you don’t need to, Let Go
+Introduction
+
+    
+        
+    
+
+I recently read Zen in the Art of Archery, which isn’t a book abou…</p>
+      <small class="source">
+        via <a href="https://jarbus.net/">jarbus.net on </a>
+      </small>
+      <small class="date">February 22, 2024</small>
+    </div>
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://drewdevault.com/2023/12/26/2023-12-26-Prusa-is-floundering.html" target="_blank" rel="noopener">Why Prusa is floundering, and how you can avoid their fate</a>
+      </h4>
+      <p class="summary" dir="auto">Prusa is a 3D printer manufacturer which has a long history of being admired by
+the 3D printing community for high quality, open source printers. They have been
+struggling as of late, and came under criticism for making the firmware of their
+Mk4 printer non-…</p>
+      <small class="source">
+        via <a href="https://drewdevault.com">Drew DeVault&#39;s blog</a>
+      </small>
+      <small class="date">December 26, 2023</small>
+    </div>
+    
+  </section>
+  <p class="attribution">
+    Generated by
+    <a href="https://git.sr.ht/~sircmpwn/openring">openring</a>
+  </p>
+</section>
+<style>
+.webring .articles {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -0.5rem;
+}
+.webring .title {
+  margin: 0;
+}
+.webring .article {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  background: #3c3836;
+  min-width: 10rem;
+}
+.webring .summary {
+  font-size: 0.8rem;
+  flex: 1 1 0;
+}
+.webring .attribution {
+  text-align: right;
+  font-size: 0.8rem;
+  color: #555;
+}
+</style>
+
+
+      </div>
+      <footer>
+  <hr />
+  
+    <p id="social">
+      Find me around the web:
+      <br />
+      
+        
+        <a href="https://github.com/indymnv">GitHub</a>
+      
+         | 
+        <a href="https://codeberg.org/indymnv">Codeberg</a>
+      
+         | 
+        <a href="https://fosstodon.org/@indymnv">Mastodon</a>
+      
+         | 
+        <a href="https://matrix.to/#/@navi93:matrix.org">Matrix</a>
+      
+    </p>
+  
+  <p class="copyright">
+    Copyright © 2024
+    <a href="https://smigle-hugo-theme.netlify.app/"><strong>Navi</strong></a>.
+    This work is licensed under the
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> license.
+  </p>
+  <p class="builtWith">
+    Built with
+    <a href="http://www.gohugo.io/">Hugo</a>,
+    using the theme
+    <a href="https://gitlab.com/ian-s-mcb/smigle-hugo-theme">smigle</a>,
+    which was influenced by the theme
+    <a href="https://github.com/sumnerevans/smol">smol</a>.
+  </p>
+</footer>
+
+    </div>
+  </body>
+</html>

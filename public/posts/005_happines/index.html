@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content=""
+  />
+  
+    
+      <title>World Happiness Report - EDA &amp; clustering with Julia | The Tarkus Factory</title>
+    
+  
+  <link rel="stylesheet" href="/css/reset.css"/>
+  <link rel="stylesheet" href="/css/font.css"/>
+  <link rel="stylesheet" href="/css/smigle.css"/>
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+</head>
+
+  <body>
+    <div id="root">
+      <header>
+  <div id="brand">
+    <a class="icon-link" href="https://smigle-hugo-theme.netlify.app/">
+      <img
+        class="icon"
+        src="/images/brandIcon.svg"
+      />
+    </a>
+    <div class="text">
+      <a href="https://smigle-hugo-theme.netlify.app/"><h1>The Tarkus Factory</h1></a>
+      <h3>Navi&#39;s Personal Blog</h3>
+    </div>
+  </div>
+  <nav>
+    
+      
+        
+        <a href="/"><b>Home</b></a>
+      
+         | 
+        <a href="/about/"><b>About</b></a>
+      
+         | 
+        <a href="/posts/"><b>Posts</b></a>
+      
+         | 
+        <a href="/categories/"><b>Categories</b></a>
+      
+         | 
+        <a href="/tags/"><b>Tags</b></a>
+      
+         | 
+        <a href="/index.xml"><b>RSS</b></a>
+      
+    
+    
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: '\\[', right: '\\]', display: true},   
+        {left: '$$', right: '$$', display: true},     
+        {left: '\\(', right: '\\)', display: false},  
+      ],
+      throwOnError : false
+    });
+  });
+</script>
+
+
+
+  
+  </nav>
+  <hr />
+</header>
+
+      <div id="content">
+        
+  <main>
+    <article>
+      <h1 class="title">World Happiness Report - EDA &amp; clustering with Julia</h1>
+      
+      <div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2022-11-23</time>
+    <span>in</span>
+    
+      <a href="/categories/quantitative-methods">quantitative methods</a>, 
+      <a href="/categories/programming">programming</a>
+  </strong>
+  <span> • 2431 words</span>
+  <span> • 12 minute read</span>
+  
+    <div>
+      Last updated on
+      <time>2024-03-16</time>
+    </div>
+  
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/tags/julia">julia</a>, 
+        <a href="/tags/data-science">data science</a>, 
+        <a href="/tags/eda">eda</a>
+    </div>
+  
+</div>
+
+      <div class="content"><p>The purpose of this post is to show Julia as a language for data analysis and Machine Learning. Sadly Kaggle does not support Julia Kernels (hopefully, they will add it in the future). Therefore I wanted to take advantage of this space to show a reimplementation of Python/R Notebooks to Julia. In this context, I took data on happiness in countries in 2021 and some factors considered in this exciting survey.</p>
+<ul>
+<li>You can get the dataset in <a href="https://www.kaggle.com/datasets/ajaypalsinghlo/world-happiness-report-2021?datasetId=1222432&amp;sortBy=voteCount">Kaggle</a></li>
+<li>The full code is in my <a href="https://github.com/indymnv/happiness-score-with-julia">Github</a></li>
+</ul>
+<h2 id="packages-used">Packages used</h2>
+<p>I&rsquo;m using Julia version <code>1.8.0</code> in this project, and the library versions are in the Project.toml, there are some installed that I didn&rsquo;t end up using for this analysis, but these are the important ones</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#66d9ef">using</span> DataFrames
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> DataFramesMeta
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> CSV
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> Plots
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> StatsPlots
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> Statistics
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> HypothesisTests
+</span></span><span style="display:flex;"><span>Plots<span style="color:#f92672">.</span>theme(<span style="color:#e6db74">:ggplot2</span>)
+</span></span></code></pre></div><p>Let&rsquo;s start reading the file.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span>df_2021 <span style="color:#f92672">=</span> DataFrame(CSV<span style="color:#f92672">.</span>File(<span style="color:#e6db74">&#34;./data/2021.csv&#34;</span>, normalizenames<span style="color:#f92672">=</span>true))
+</span></span></code></pre></div><p>You can see the dataset in the REPL.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span>julia<span style="color:#f92672">&gt;</span> df_2021 <span style="color:#f92672">=</span> DataFrame(CSV<span style="color:#f92672">.</span>File(<span style="color:#e6db74">&#34;./data/2021.csv&#34;</span>, normalizenames<span style="color:#f92672">=</span>true))
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">149</span><span style="color:#f92672">×</span><span style="color:#ae81ff">20</span> DataFrame
+</span></span><span style="display:flex;"><span> Row │ Country_name    Regional_indicator            Ladder_score  Standard_error_of_ladder_score  upperwhi <span style="color:#f92672">⋯</span>
+</span></span><span style="display:flex;"><span>     │ String31        <span style="color:#66d9ef">String</span>                        <span style="color:#66d9ef">Float64</span>       <span style="color:#66d9ef">Float64</span>                         <span style="color:#66d9ef">Float64</span>  <span style="color:#f92672">⋯</span>
+</span></span><span style="display:flex;"><span>─────┼───────────────────────────────────────────────────────────────────────────────────────────────────────
+</span></span><span style="display:flex;"><span>   <span style="color:#ae81ff">1</span> │ Finland         Western Europe                       <span style="color:#ae81ff">7.842</span>                           <span style="color:#ae81ff">0.032</span>         <span style="color:#ae81ff">7</span> <span style="color:#f92672">⋯</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#ae81ff">2</span> │ Denmark         Western Europe                       <span style="color:#ae81ff">7.62</span>                            <span style="color:#ae81ff">0.035</span>         <span style="color:#ae81ff">7</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#ae81ff">3</span> │ Switzerland     Western Europe                       <span style="color:#ae81ff">7.571</span>                           <span style="color:#ae81ff">0.036</span>         <span style="color:#ae81ff">7</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#ae81ff">4</span> │ Iceland         Western Europe                       <span style="color:#ae81ff">7.554</span>                           <span style="color:#ae81ff">0.059</span>         <span style="color:#ae81ff">7</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#ae81ff">5</span> │ Netherlands     Western Europe                       <span style="color:#ae81ff">7.464</span>                           <span style="color:#ae81ff">0.027</span>         <span style="color:#ae81ff">7</span> <span style="color:#f92672">⋯</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#ae81ff">6</span> │ Norway          Western Europe                       <span style="color:#ae81ff">7.392</span>                           <span style="color:#ae81ff">0.035</span>         <span style="color:#ae81ff">7</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#ae81ff">7</span> │ Sweden          Western Europe                       <span style="color:#ae81ff">7.363</span>                           <span style="color:#ae81ff">0.036</span>         <span style="color:#ae81ff">7</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#ae81ff">8</span> │ Luxembourg      Western Europe                       <span style="color:#ae81ff">7.324</span>                           <span style="color:#ae81ff">0.037</span>         <span style="color:#ae81ff">7</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#ae81ff">9</span> │ New Zealand     North America and ANZ                <span style="color:#ae81ff">7.277</span>                           <span style="color:#ae81ff">0.04</span>          <span style="color:#ae81ff">7</span> <span style="color:#f92672">⋯</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">10</span> │ Austria         Western Europe                       <span style="color:#ae81ff">7.268</span>                           <span style="color:#ae81ff">0.036</span>         <span style="color:#ae81ff">7</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">11</span> │ Australia       North America and ANZ                <span style="color:#ae81ff">7.183</span>                           <span style="color:#ae81ff">0.041</span>         <span style="color:#ae81ff">7</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">12</span> │ Israel          Middle East and North Africa         <span style="color:#ae81ff">7.157</span>                           <span style="color:#ae81ff">0.034</span>         <span style="color:#ae81ff">7</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">13</span> │ Germany         Western Europe                       <span style="color:#ae81ff">7.155</span>                           <span style="color:#ae81ff">0.04</span>          <span style="color:#ae81ff">7</span> <span style="color:#f92672">⋯</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">14</span> │ Canada          North America and ANZ                <span style="color:#ae81ff">7.103</span>                           <span style="color:#ae81ff">0.042</span>         <span style="color:#ae81ff">7</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">⋮</span>  │       <span style="color:#f92672">⋮</span>                      <span style="color:#f92672">⋮</span>                     <span style="color:#f92672">⋮</span>                      <span style="color:#f92672">⋮</span>                      <span style="color:#f92672">⋮</span>   <span style="color:#f92672">⋱</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">136</span> │ Togo            Sub<span style="color:#f92672">-</span>Saharan Africa                   <span style="color:#ae81ff">4.107</span>                           <span style="color:#ae81ff">0.077</span>         <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">137</span> │ Zambia          Sub<span style="color:#f92672">-</span>Saharan Africa                   <span style="color:#ae81ff">4.073</span>                           <span style="color:#ae81ff">0.069</span>         <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">138</span> │ Sierra Leone    Sub<span style="color:#f92672">-</span>Saharan Africa                   <span style="color:#ae81ff">3.849</span>                           <span style="color:#ae81ff">0.077</span>         <span style="color:#ae81ff">4</span> <span style="color:#f92672">⋯</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">139</span> │ India           South Asia                           <span style="color:#ae81ff">3.819</span>                           <span style="color:#ae81ff">0.026</span>         <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">140</span> │ Burundi         Sub<span style="color:#f92672">-</span>Saharan Africa                   <span style="color:#ae81ff">3.775</span>                           <span style="color:#ae81ff">0.107</span>         <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">141</span> │ Yemen           Middle East and North Africa         <span style="color:#ae81ff">3.658</span>                           <span style="color:#ae81ff">0.07</span>          <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">142</span> │ Tanzania        Sub<span style="color:#f92672">-</span>Saharan Africa                   <span style="color:#ae81ff">3.623</span>                           <span style="color:#ae81ff">0.071</span>         <span style="color:#ae81ff">3</span> <span style="color:#f92672">⋯</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">143</span> │ Haiti           Latin America and Caribbean          <span style="color:#ae81ff">3.615</span>                           <span style="color:#ae81ff">0.173</span>         <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">144</span> │ Malawi          Sub<span style="color:#f92672">-</span>Saharan Africa                   <span style="color:#ae81ff">3.6</span>                             <span style="color:#ae81ff">0.092</span>         <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">145</span> │ Lesotho         Sub<span style="color:#f92672">-</span>Saharan Africa                   <span style="color:#ae81ff">3.512</span>                           <span style="color:#ae81ff">0.12</span>          <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">146</span> │ Botswana        Sub<span style="color:#f92672">-</span>Saharan Africa                   <span style="color:#ae81ff">3.467</span>                           <span style="color:#ae81ff">0.074</span>         <span style="color:#ae81ff">3</span> <span style="color:#f92672">⋯</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">147</span> │ Rwanda          Sub<span style="color:#f92672">-</span>Saharan Africa                   <span style="color:#ae81ff">3.415</span>                           <span style="color:#ae81ff">0.068</span>         <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">148</span> │ Zimbabwe        Sub<span style="color:#f92672">-</span>Saharan Africa                   <span style="color:#ae81ff">3.145</span>                           <span style="color:#ae81ff">0.058</span>         <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">149</span> │ Afghanistan     South Asia                           <span style="color:#ae81ff">2.523</span>                           <span style="color:#ae81ff">0.038</span>         <span style="color:#ae81ff">2</span>
+</span></span></code></pre></div><p>To see the columns name, simply use</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span>names(df_2021)
+</span></span></code></pre></div><p>getting a vector with all column names</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span>julia<span style="color:#f92672">&gt;</span> names(df_2021)
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">20</span><span style="color:#f92672">-</span>element <span style="color:#66d9ef">Vector</span>{<span style="color:#66d9ef">String</span>}<span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;Country_name&#34;</span>
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;Regional_indicator&#34;</span>
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;Ladder_score&#34;</span>
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;Standard_error_of_ladder_score&#34;</span>
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;upperwhisker&#34;</span>
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;lowerwhisker&#34;</span>
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;Logged_GDP_per_capita&#34;</span>
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;Social_support&#34;</span>
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;Healthy_life_expectancy&#34;</span>
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;Freedom_to_make_life_choices&#34;</span>
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;Generosity&#34;</span>
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;Perceptions_of_corruption&#34;</span>
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;Ladder_score_in_Dystopia&#34;</span>
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;Explained_by_Log_GDP_per_capita&#34;</span>
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;Explained_by_Social_support&#34;</span>
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;Explained_by_Healthy_life_expectancy&#34;</span>
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;Explained_by_Freedom_to_make_life_choices&#34;</span>
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;Explained_by_Generosity&#34;</span>
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;Explained_by_Perceptions_of_corruption&#34;</span>
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;Dystopia_residual&#34;</span>
+</span></span></code></pre></div><p>The features of this dataset are as follow:</p>
+<ul>
+<li>Country_name: Name of the country</li>
+<li>Regional_indicator: The region to which the country belongs.</li>
+<li>Ladder_score: The English wording of the question is “Please imagine a ladder, with steps numbered from 0 at the bottom to 10 at the top. The top of the ladder represents the best possible life for you and the bottom of the ladder represents the worst possible life for you. On which step of the ladder would you say you personally feel you stand at this time?”, this metric represent the average of this response by country</li>
+<li>Standard_error_of_ladder_score: This metric represent the standard error of the Ladder_score metric.</li>
+<li>upperwhisker: Refers to the upper part of a box plot of the Ladder_score metric</li>
+<li>lowerwhisker Refers to the lower part of a box plot of the Ladder_score metric</li>
+<li>Logged_GDP_per_capita: GDP per Capita Registered to the date</li>
+<li>Social_support: Average of the question based on: &lsquo;If you were in trouble, do you have relatives or friends you can count on to help you whenever you need them, or not?&rsquo; The response is 0 for &rsquo;no&rsquo; and 1 for &lsquo;yes&rsquo;.</li>
+<li>Healthy_life_expectancy: Average lifespan by country, information extracted from the World Health Organization’s (WHO) Global Health Observatory data repository.</li>
+<li>Freedom_to_make_life_choices: National average of responses to the GWP question “Are you satisfied or dissatisfied with your freedom to choose what you do with your life?”</li>
+<li>Generosity: Is the residual of regressing national average of response to the GWP question “Have you donated money to a charity in the past month?” on GDP per capita.</li>
+<li>Perceptions_of_corruption: “Is corruption widespread throughout the government or not” and “Is corruption widespread within businesses or not?” The overall perception is just the average of the two 0-or-1 responses.</li>
+<li>The variable &lsquo;Dystopia&rsquo; and the explained variables that come from a built-in regression model are not taken into consideration for this project.</li>
+</ul>
+<p>To see what is a regional indicator, we can see how every country is grouped.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span>julia<span style="color:#f92672">&gt;</span> unique(df_2021<span style="color:#f92672">.</span>Regional_indicator)
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">10</span><span style="color:#f92672">-</span>element <span style="color:#66d9ef">Vector</span>{<span style="color:#66d9ef">String</span>}<span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;Western Europe&#34;</span>
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;North America and ANZ&#34;</span>
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;Middle East and North Africa&#34;</span>
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;Latin America and Caribbean&#34;</span>
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;Central and Eastern Europe&#34;</span>
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;East Asia&#34;</span>
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;Southeast Asia&#34;</span>
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;Commonwealth of Independent States&#34;</span>
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;Sub-Saharan Africa&#34;</span>
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;South Asia&#34;</span>
+</span></span></code></pre></div><p>Let&rsquo;s do a simple operation with the dataframe getting the number of countries by regional indicator and sorting those</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span>sort(
+</span></span><span style="display:flex;"><span>    combine(groupby(df_2021, <span style="color:#e6db74">:Regional_indicator</span>), nrow), 
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">:nrow</span>
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><p>Getting this output</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span>julia<span style="color:#f92672">&gt;</span> sort(
+</span></span><span style="display:flex;"><span>           combine(groupby(df_2021, <span style="color:#e6db74">:Regional_indicator</span>), nrow),
+</span></span><span style="display:flex;"><span>           <span style="color:#e6db74">:nrow</span>
+</span></span><span style="display:flex;"><span>       )
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">10</span><span style="color:#f92672">×</span><span style="color:#ae81ff">2</span> DataFrame
+</span></span><span style="display:flex;"><span> Row │ Regional_indicator                 nrow
+</span></span><span style="display:flex;"><span>     │ <span style="color:#66d9ef">String</span>                             <span style="color:#66d9ef">Int64</span>
+</span></span><span style="display:flex;"><span>─────┼──────────────────────────────────────────
+</span></span><span style="display:flex;"><span>   <span style="color:#ae81ff">1</span> │ North America and ANZ                  <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#ae81ff">2</span> │ East Asia                              <span style="color:#ae81ff">6</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#ae81ff">3</span> │ South Asia                             <span style="color:#ae81ff">7</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#ae81ff">4</span> │ Southeast Asia                         <span style="color:#ae81ff">9</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#ae81ff">5</span> │ Commonwealth of Independent Stat…     <span style="color:#ae81ff">12</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#ae81ff">6</span> │ Middle East and North Africa          <span style="color:#ae81ff">17</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#ae81ff">7</span> │ Central and Eastern Europe            <span style="color:#ae81ff">17</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#ae81ff">8</span> │ Latin America and Caribbean           <span style="color:#ae81ff">20</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#ae81ff">9</span> │ Western Europe                        <span style="color:#ae81ff">21</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">10</span> │ Sub<span style="color:#f92672">-</span>Saharan Africa                    <span style="color:#ae81ff">36</span>
+</span></span></code></pre></div><p>With this, we can see a more significant number of countries in Sub-Saharan Africa and only a smaller group of countries in North America and ANZ.</p>
+<p>Now, let&rsquo;s try to slice our data. We will create a data frame called <code>float_df</code> that contains only the <code>Float64</code> variables but excludes the &ldquo;explained_&rdquo; variables. This new dataframe will help us with some operations later.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#75715e">#Get all columns Float64</span>
+</span></span><span style="display:flex;"><span>float_df <span style="color:#f92672">=</span> select(df_2021, findall(col <span style="color:#f92672">-&gt;</span> eltype(col) <span style="color:#f92672">&lt;:</span> <span style="color:#66d9ef">Float64</span>, eachcol(df_2021)))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Take away the Explained variables</span>
+</span></span><span style="display:flex;"><span>float_df <span style="color:#f92672">=</span> float_df[<span style="color:#f92672">:</span>,Not(names(select(float_df, <span style="color:#e6db74">r</span><span style="color:#e6db74">&#34;Explained&#34;</span>)))] 
+</span></span></code></pre></div><p>Let&rsquo;s make our first plot.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span>scatter(
+</span></span><span style="display:flex;"><span>    df_2021<span style="color:#f92672">.</span>Social_support,
+</span></span><span style="display:flex;"><span>    df_2021<span style="color:#f92672">.</span>Ladder_score,
+</span></span><span style="display:flex;"><span>    size <span style="color:#f92672">=</span> (<span style="color:#ae81ff">1000</span>,<span style="color:#ae81ff">800</span>),
+</span></span><span style="display:flex;"><span>    label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;country&#34;</span>,
+</span></span><span style="display:flex;"><span>    xaxis <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Social Support&#34;</span>,
+</span></span><span style="display:flex;"><span>    yaxis <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Ladder Score&#34;</span>,
+</span></span><span style="display:flex;"><span>    title <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Relation between Social Support and Happiness Index Score by country&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><p><img src="/005_happines/scatterplot.png" alt="scatterplot with ladder score and social support"></p>
+<p>If we want a view of all float variables in several histograms, we can add this code using Statsplots.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span>N <span style="color:#f92672">=</span> ncol(float_df)
+</span></span><span style="display:flex;"><span>numerical_cols <span style="color:#f92672">=</span> <span style="color:#66d9ef">Symbol</span><span style="color:#f92672">.</span>(names(float_df,<span style="color:#66d9ef">Real</span>))
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@df</span> float_df Plots<span style="color:#f92672">.</span>histogram(cols();
+</span></span><span style="display:flex;"><span>                             layout<span style="color:#f92672">=</span>N,
+</span></span><span style="display:flex;"><span>                             size<span style="color:#f92672">=</span>(<span style="color:#ae81ff">1400</span>,<span style="color:#ae81ff">800</span>),
+</span></span><span style="display:flex;"><span>                             title<span style="color:#f92672">=</span>permutedims(numerical_cols),
+</span></span><span style="display:flex;"><span>                             label <span style="color:#f92672">=</span> false)
+</span></span></code></pre></div><p><img src="/005_happines/histogram.png" alt="Histogram of all variables"></p>
+<p>And If we want to compare it with boxplots.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#a6e22e">@df</span> float_df boxplot(cols(), 
+</span></span><span style="display:flex;"><span>                     fillalpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.75</span>, 
+</span></span><span style="display:flex;"><span>                     linewidth<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>,
+</span></span><span style="display:flex;"><span>                     title <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Comparing distribution for all variables in dataset&#34;</span>,
+</span></span><span style="display:flex;"><span>                     legend <span style="color:#f92672">=</span> <span style="color:#e6db74">:topleft</span>)
+</span></span></code></pre></div><p><img src="/005_happines/boxplot_all.png" alt="Boxplot all variables"></p>
+<p>Without going into so much detail, we can affirm that the Ladder Score is the variable related to the result of the survey on the degree of happiness in the country (our dependent variable). Explained variables correspond to the preprocessing to build the Ladder Score, for this reason, we remove them from the dataframe and will hold with only the raw data.</p>
+<p>What are the top 5 countries and bottom 5?</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#75715e"># Top 5 and bottom 5 countries by ladder score</span>
+</span></span><span style="display:flex;"><span>sort!(df_2021, <span style="color:#e6db74">:Ladder_score</span>, rev<span style="color:#f92672">=</span>true)
+</span></span><span style="display:flex;"><span>plot(
+</span></span><span style="display:flex;"><span>    bar(
+</span></span><span style="display:flex;"><span>        first(df_2021<span style="color:#f92672">.</span>Country_name, <span style="color:#ae81ff">5</span> ),
+</span></span><span style="display:flex;"><span>        first(df_2021<span style="color:#f92672">.</span>Ladder_score, <span style="color:#ae81ff">5</span> ),
+</span></span><span style="display:flex;"><span>        color<span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;green&#34;</span>,
+</span></span><span style="display:flex;"><span>        title <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Top 5 countries by Happiness score&#34;</span>,
+</span></span><span style="display:flex;"><span>        legend <span style="color:#f92672">=</span> false,
+</span></span><span style="display:flex;"><span>    ),
+</span></span><span style="display:flex;"><span>    bar(
+</span></span><span style="display:flex;"><span>        last(df_2021<span style="color:#f92672">.</span>Country_name, <span style="color:#ae81ff">5</span> ),
+</span></span><span style="display:flex;"><span>        last(df_2021<span style="color:#f92672">.</span>Ladder_score, <span style="color:#ae81ff">5</span> ),
+</span></span><span style="display:flex;"><span>        color <span style="color:#f92672">=</span><span style="color:#e6db74">&#34;red&#34;</span>,
+</span></span><span style="display:flex;"><span>        title <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Bottom 5 countries by Happiness score&#34;</span>,
+</span></span><span style="display:flex;"><span>        legend <span style="color:#f92672">=</span> false,
+</span></span><span style="display:flex;"><span>    ),
+</span></span><span style="display:flex;"><span>size<span style="color:#f92672">=</span>(<span style="color:#ae81ff">1000</span>,<span style="color:#ae81ff">800</span>),
+</span></span><span style="display:flex;"><span>yaxis <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Happines Score&#34;</span>,
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><p><img src="/005_happines/rank.png" alt="top5 and bottom 5"></p>
+<p>And the classic heatmap for correlation with the following function.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> heatmap_cor(df)
+</span></span><span style="display:flex;"><span>    cm <span style="color:#f92672">=</span> cor(<span style="color:#66d9ef">Matrix</span>(df))
+</span></span><span style="display:flex;"><span>    cols <span style="color:#f92672">=</span> <span style="color:#66d9ef">Symbol</span><span style="color:#f92672">.</span>(names(df))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    (n,m) <span style="color:#f92672">=</span> size(cm)
+</span></span><span style="display:flex;"><span>    display(
+</span></span><span style="display:flex;"><span>    heatmap(cm, 
+</span></span><span style="display:flex;"><span>        fc <span style="color:#f92672">=</span> cgrad([<span style="color:#e6db74">:white</span>,<span style="color:#e6db74">:dodgerblue4</span>]),
+</span></span><span style="display:flex;"><span>        xticks <span style="color:#f92672">=</span> (<span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>m,cols),
+</span></span><span style="display:flex;"><span>        xrot<span style="color:#f92672">=</span> <span style="color:#ae81ff">90</span>,
+</span></span><span style="display:flex;"><span>        size<span style="color:#f92672">=</span> (<span style="color:#ae81ff">800</span>, <span style="color:#ae81ff">800</span>),
+</span></span><span style="display:flex;"><span>        yticks <span style="color:#f92672">=</span> (<span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>m,cols),
+</span></span><span style="display:flex;"><span>        yflip<span style="color:#f92672">=</span>true))
+</span></span><span style="display:flex;"><span>    display(
+</span></span><span style="display:flex;"><span>    annotate!([(j, i, text(round(cm[i,j],digits<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>),
+</span></span><span style="display:flex;"><span>                       <span style="color:#ae81ff">8</span>,<span style="color:#e6db74">&#34;Computer Modern&#34;</span>,<span style="color:#e6db74">:black</span>))
+</span></span><span style="display:flex;"><span>           <span style="color:#66d9ef">for</span> i <span style="color:#66d9ef">in</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>n <span style="color:#66d9ef">for</span> j <span style="color:#66d9ef">in</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>m])
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p><img src="/005_happines/heatmap.png" alt="heatmap"></p>
+<p>And now, we can build a function where we can get the mean ladder score by regional indicator and compare it with the distribution of all countries.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> distribution_plot(df)
+</span></span><span style="display:flex;"><span>    display(
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">@df</span> df density(<span style="color:#e6db74">:Ladder_score</span>,
+</span></span><span style="display:flex;"><span>        legend <span style="color:#f92672">=</span> <span style="color:#e6db74">:topleft</span>, size<span style="color:#f92672">=</span>(<span style="color:#ae81ff">1000</span>,<span style="color:#ae81ff">800</span>) , 
+</span></span><span style="display:flex;"><span>        fill<span style="color:#f92672">=</span>(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">.3</span>,<span style="color:#e6db74">:yellow</span>),
+</span></span><span style="display:flex;"><span>        label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Distribution&#34;</span> ,
+</span></span><span style="display:flex;"><span>        xaxis<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Happiness Index Score&#34;</span>, 
+</span></span><span style="display:flex;"><span>        yaxis <span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Density&#34;</span>, 
+</span></span><span style="display:flex;"><span>        title <span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Comparison Happiness Index Score by Region 2021&#34;</span>) 
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>    display(
+</span></span><span style="display:flex;"><span>        plot!([mean(df_2021<span style="color:#f92672">.</span>Ladder_score)],
+</span></span><span style="display:flex;"><span>        seriestype<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;vline&#34;</span>,
+</span></span><span style="display:flex;"><span>        line <span style="color:#f92672">=</span> (<span style="color:#e6db74">:dash</span>), 
+</span></span><span style="display:flex;"><span>        lw <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>,
+</span></span><span style="display:flex;"><span>        label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Mean&#34;</span>)
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> element <span style="color:#66d9ef">in</span> unique(df_2021<span style="color:#f92672">.</span>Regional_indicator)
+</span></span><span style="display:flex;"><span>        display(
+</span></span><span style="display:flex;"><span>            plot!(
+</span></span><span style="display:flex;"><span>            [mean(mean([filter(row<span style="color:#f92672">-&gt;</span>row[<span style="color:#e6db74">&#34;Regional_indicator&#34;</span>]<span style="color:#f92672">==</span>element, df)<span style="color:#f92672">.</span>Ladder_score]))],
+</span></span><span style="display:flex;"><span>            seriestype<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;vline&#34;</span>,
+</span></span><span style="display:flex;"><span>            lw <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>,
+</span></span><span style="display:flex;"><span>            label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">$element</span><span style="color:#e6db74">&#34;</span>) 
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p><img src="/005_happines/index_region.png" alt="distribution region"></p>
+<p>Suppose we want to try the same idea but with countries. In that case, we can take advantage of multiple dispatch and create a function that receives a list of countries and creates a variation of the distribution with countries.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> distribution_plot(df, var_filter, list_elements)
+</span></span><span style="display:flex;"><span>    display(
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">@df</span> df density(<span style="color:#e6db74">:Ladder_score</span>,
+</span></span><span style="display:flex;"><span>        legend <span style="color:#f92672">=</span> <span style="color:#e6db74">:topleft</span>, size<span style="color:#f92672">=</span>(<span style="color:#ae81ff">1000</span>,<span style="color:#ae81ff">800</span>) , 
+</span></span><span style="display:flex;"><span>        fill<span style="color:#f92672">=</span>(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">.3</span>,<span style="color:#e6db74">:yellow</span>),
+</span></span><span style="display:flex;"><span>        label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Distribution&#34;</span> ,
+</span></span><span style="display:flex;"><span>        xaxis<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Happiness Index Score&#34;</span>, 
+</span></span><span style="display:flex;"><span>        yaxis <span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Density&#34;</span>, 
+</span></span><span style="display:flex;"><span>        title <span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Happiness index score compare by countries 2021&#34;</span>) 
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>    display(
+</span></span><span style="display:flex;"><span>        plot!([mean(df_2021<span style="color:#f92672">.</span>Ladder_score)],
+</span></span><span style="display:flex;"><span>        seriestype<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;vline&#34;</span>,
+</span></span><span style="display:flex;"><span>        line <span style="color:#f92672">=</span> (<span style="color:#e6db74">:dash</span>), 
+</span></span><span style="display:flex;"><span>        lw <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>,
+</span></span><span style="display:flex;"><span>        label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Mean&#34;</span>)
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> element <span style="color:#66d9ef">in</span> list_elements
+</span></span><span style="display:flex;"><span>        display(
+</span></span><span style="display:flex;"><span>            plot!(
+</span></span><span style="display:flex;"><span>            mean([filter(row<span style="color:#f92672">-&gt;</span>row[var_filter]<span style="color:#f92672">==</span>element, df)<span style="color:#f92672">.</span>Ladder_score]),
+</span></span><span style="display:flex;"><span>            seriestype<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;vline&#34;</span>,
+</span></span><span style="display:flex;"><span>            lw <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>,
+</span></span><span style="display:flex;"><span>            label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">$element</span><span style="color:#e6db74">&#34;</span>) 
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>Let&rsquo;s test our new function, comparing three countries.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span>distribution_plot(df_2021, <span style="color:#e6db74">&#34;Country_name&#34;</span>, [<span style="color:#e6db74">&#34;Chile&#34;</span>,
+</span></span><span style="display:flex;"><span>                                            <span style="color:#e6db74">&#34;United States&#34;</span>,
+</span></span><span style="display:flex;"><span>                                            <span style="color:#e6db74">&#34;Japan&#34;</span>,
+</span></span><span style="display:flex;"><span>                                           ])
+</span></span></code></pre></div><p><img src="/005_happines/happiness_countries.png" alt="distribution countries"></p>
+<p>Here we can see how the USA has the highest score, followed by Chile and Japan.</p>
+<p>To end the first part, let&rsquo;s apply some statistical tests. We will use an equal variance T-test to compare distribution from different regions. The function is as follows.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#75715e"># Perform a simple test to compare distributions</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># This function performs a two-sample t-test of the null hypothesis that s1 and s2 </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># come from distributions with equal means and variances </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># against the alternative hypothesis that the distributions have different means </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># but equal variances.</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> t_test_sample(df, var, x , y)
+</span></span><span style="display:flex;"><span>    x <span style="color:#f92672">=</span> filter(row <span style="color:#f92672">-&gt;</span>row[var] <span style="color:#f92672">==</span> x, df)<span style="color:#f92672">.</span>Ladder_score
+</span></span><span style="display:flex;"><span>    y <span style="color:#f92672">=</span> filter(row <span style="color:#f92672">-&gt;</span>row[var] <span style="color:#f92672">==</span> y, df)<span style="color:#f92672">.</span>Ladder_score
+</span></span><span style="display:flex;"><span>    EqualVarianceTTest(vec(x), vec(y))
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>We will have this output if we compare Western Europe and North America and ANZ.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span>t_test_sample(df_2021, <span style="color:#e6db74">&#34;Regional_indicator&#34;</span>, <span style="color:#e6db74">&#34;Western Europe&#34;</span>, <span style="color:#e6db74">&#34;North America and ANZ&#34;</span>)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span>julia<span style="color:#f92672">&gt;</span> t_test_sample(df_2021, <span style="color:#e6db74">&#34;Regional_indicator&#34;</span>, <span style="color:#e6db74">&#34;Western Europe&#34;</span>, <span style="color:#e6db74">&#34;North America and ANZ&#34;</span>)
+</span></span><span style="display:flex;"><span>Two sample t<span style="color:#f92672">-</span>test (equal variance)
+</span></span><span style="display:flex;"><span><span style="color:#f92672">----------------------------------</span>
+</span></span><span style="display:flex;"><span>Population details<span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    parameter of interest<span style="color:#f92672">:</span>   Mean difference
+</span></span><span style="display:flex;"><span>    value under h_0<span style="color:#f92672">:</span>         <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    point estimate<span style="color:#f92672">:</span>          <span style="color:#f92672">-</span><span style="color:#ae81ff">0.213595</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">95</span><span style="color:#f92672">%</span> confidence interval<span style="color:#f92672">:</span> (<span style="color:#f92672">-</span><span style="color:#ae81ff">0.9068</span>, <span style="color:#ae81ff">0.4796</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Test summary<span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    outcome with <span style="color:#ae81ff">95</span><span style="color:#f92672">%</span> confidence<span style="color:#f92672">:</span> fail to reject h_0
+</span></span><span style="display:flex;"><span>    two<span style="color:#f92672">-</span>sided p<span style="color:#f92672">-</span>value<span style="color:#f92672">:</span>           <span style="color:#ae81ff">0.5301</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Details<span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    number of observations<span style="color:#f92672">:</span>   [<span style="color:#ae81ff">21</span>,<span style="color:#ae81ff">4</span>]
+</span></span><span style="display:flex;"><span>    t<span style="color:#f92672">-</span>statistic<span style="color:#f92672">:</span>              <span style="color:#f92672">-</span><span style="color:#ae81ff">0.6374218416101513</span>
+</span></span><span style="display:flex;"><span>    degrees of freedom<span style="color:#f92672">:</span>       <span style="color:#ae81ff">23</span>
+</span></span><span style="display:flex;"><span>    empirical standard error<span style="color:#f92672">:</span> <span style="color:#ae81ff">0.3350924366753546</span>
+</span></span></code></pre></div><p>We don&rsquo;t have enough evidence to reject the hypothesis that these samples come from distributions with equal means and variance. On another side, if we try comparing Western Europe with South Asia, we can see this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span>julia<span style="color:#f92672">&gt;</span> t_test_sample(df_2021, <span style="color:#e6db74">&#34;Regional_indicator&#34;</span>, <span style="color:#e6db74">&#34;South Asia&#34;</span>, <span style="color:#e6db74">&#34;Western Europe&#34;</span>)
+</span></span><span style="display:flex;"><span>Two sample t<span style="color:#f92672">-</span>test (equal variance)
+</span></span><span style="display:flex;"><span><span style="color:#f92672">----------------------------------</span>
+</span></span><span style="display:flex;"><span>Population details<span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    parameter of interest<span style="color:#f92672">:</span>   Mean difference
+</span></span><span style="display:flex;"><span>    value under h_0<span style="color:#f92672">:</span>         <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    point estimate<span style="color:#f92672">:</span>          <span style="color:#f92672">-</span><span style="color:#ae81ff">2.47305</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">95</span><span style="color:#f92672">%</span> confidence interval<span style="color:#f92672">:</span> (<span style="color:#f92672">-</span><span style="color:#ae81ff">3.144</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1.802</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Test summary<span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    outcome with <span style="color:#ae81ff">95</span><span style="color:#f92672">%</span> confidence<span style="color:#f92672">:</span> reject h_0
+</span></span><span style="display:flex;"><span>    two<span style="color:#f92672">-</span>sided p<span style="color:#f92672">-</span>value<span style="color:#f92672">:</span>           <span style="color:#f92672">&lt;</span><span style="color:#ae81ff">1e-07</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Details<span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    number of observations<span style="color:#f92672">:</span>   [<span style="color:#ae81ff">7</span>,<span style="color:#ae81ff">21</span>]
+</span></span><span style="display:flex;"><span>    t<span style="color:#f92672">-</span>statistic<span style="color:#f92672">:</span>              <span style="color:#f92672">-</span><span style="color:#ae81ff">7.576776118465833</span>
+</span></span><span style="display:flex;"><span>    degrees of freedom<span style="color:#f92672">:</span>       <span style="color:#ae81ff">26</span>
+</span></span><span style="display:flex;"><span>    empirical standard error<span style="color:#f92672">:</span> <span style="color:#ae81ff">0.32639840222022687</span>
+</span></span></code></pre></div><p>In this case, we can reject that hypothesis.</p>
+<h2 id="clustering">Clustering</h2>
+<p>Now we will cluster the countries using the popular algorithm Kmeans. My first option was to use  <a href="https://github.com/JuliaStats/Clustering.jl">clustering.jl</a>. However, determining the ideal number of clusters is necessary to get the Wcss (within-cluster sum of the square). With this, we can evaluate it with the elbow method, so I used <a href="https://github.com/cstjean/ScikitLearn.jl">Scikit-learn</a> wrapper. I also include an <a href="https://github.com/JuliaStats/Clustering.jl/issues/239">issue</a>.
+Well, let&rsquo;s continue with the last part. I started adding some libraries.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#66d9ef">using</span> Random
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> ScikitLearn
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> PyCall
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@sk_import</span> preprocessing<span style="color:#f92672">:</span> StandardScaler
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@sk_import</span> cluster<span style="color:#f92672">:</span> KMeans
+</span></span></code></pre></div><p>Let&rsquo;s take out from the <code>float_df</code> all the variables related to Ladder_score, and keep only the variables considered in the survey.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span>select!(float_df, Not([<span style="color:#e6db74">:Standard_error_of_ladder_score</span>, 
+</span></span><span style="display:flex;"><span>                           <span style="color:#e6db74">:Ladder_score</span>, 
+</span></span><span style="display:flex;"><span>                           <span style="color:#e6db74">:Ladder_score_in_Dystopia</span>, 
+</span></span><span style="display:flex;"><span>                           <span style="color:#e6db74">:Dystopia_residual</span>]))
+</span></span></code></pre></div><p>To train our model, we need to standardize the data, and then we will create a list to retrieve the wcss in every iteration. The function is as follows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> kmeans_train(df)
+</span></span><span style="display:flex;"><span>    X <span style="color:#f92672">=</span> fit_transform!(StandardScaler(), <span style="color:#66d9ef">Matrix</span>(df))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    wcss <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> n <span style="color:#66d9ef">in</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        Random<span style="color:#f92672">.</span>seed!(<span style="color:#ae81ff">123</span>)
+</span></span><span style="display:flex;"><span>        cluster <span style="color:#f92672">=</span>KMeans(n_clusters<span style="color:#f92672">=</span>n,
+</span></span><span style="display:flex;"><span>                        init <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;k-means++&#34;</span>,
+</span></span><span style="display:flex;"><span>                        max_iter <span style="color:#f92672">=</span> <span style="color:#ae81ff">20</span>,
+</span></span><span style="display:flex;"><span>                        n_init <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>,
+</span></span><span style="display:flex;"><span>                        random_state <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>        cluster<span style="color:#f92672">.</span>fit(X)
+</span></span><span style="display:flex;"><span>        push!(wcss, cluster<span style="color:#f92672">.</span>inertia_)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> wcss
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>Let&rsquo;s invoke the function and plot the wcss.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span>wcss <span style="color:#f92672">=</span> kmeans_train(float_df)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>plot(wcss, title <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;wcss in each cluster&#34;</span>,
+</span></span><span style="display:flex;"><span>    xaxis <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;cluster&#34;</span>,
+</span></span><span style="display:flex;"><span>   yaxis <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Wcss&#34;</span>)
+</span></span></code></pre></div><p><img src="/005_happines/elbow.png" alt="Elbow Method"></p>
+<p>In this case, I decided to go for three clusters. We can <!-- raw HTML omitted -->abuse<!-- raw HTML omitted --> make use of multiple dispatch again, adding <code>n</code> for a defined number of clusters.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> kmeans_train(df, n)
+</span></span><span style="display:flex;"><span>    X <span style="color:#f92672">=</span> fit_transform!(StandardScaler(), <span style="color:#66d9ef">Matrix</span>(df))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Random<span style="color:#f92672">.</span>seed!(<span style="color:#ae81ff">123</span>)
+</span></span><span style="display:flex;"><span>    cluster <span style="color:#f92672">=</span>KMeans(n_clusters<span style="color:#f92672">=</span>n,
+</span></span><span style="display:flex;"><span>                    init <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;k-means++&#34;</span>,
+</span></span><span style="display:flex;"><span>                    max_iter <span style="color:#f92672">=</span> <span style="color:#ae81ff">20</span>,
+</span></span><span style="display:flex;"><span>                    n_init <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>,
+</span></span><span style="display:flex;"><span>                    random_state <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>    cluster<span style="color:#f92672">.</span>fit(X)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> cluster
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>cluster<span style="color:#f92672">=</span> kmeans_train(float_df, <span style="color:#ae81ff">3</span>)
+</span></span></code></pre></div><p>If we take the first plot we did at the beginning of the post, but now we add the cluster labels, we have this plot.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>scatter(filter(row <span style="color:#f92672">-&gt;</span>row<span style="color:#f92672">.</span>cluster <span style="color:#f92672">==</span><span style="color:#ae81ff">1</span>,df)<span style="color:#f92672">.</span>Social_support, filter(row <span style="color:#f92672">-&gt;</span>row<span style="color:#f92672">.</span>cluster <span style="color:#f92672">==</span><span style="color:#ae81ff">1</span>,df)<span style="color:#f92672">.</span>Ladder_score, title <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Distribution of Happiness Score by Cluster&#34;</span>, xaxis <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Social Support&#34;</span>, yaxis<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Ladder Score&#34;</span>, label <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Cluster 1&#34;</span>, legend <span style="color:#f92672">=</span> <span style="color:#e6db74">:topleft</span>)
+</span></span><span style="display:flex;"><span>scatter!(filter(row <span style="color:#f92672">-&gt;</span>row<span style="color:#f92672">.</span>cluster <span style="color:#f92672">==</span><span style="color:#ae81ff">3</span>,df)<span style="color:#f92672">.</span>Social_support, filter(row <span style="color:#f92672">-&gt;</span>row<span style="color:#f92672">.</span>cluster <span style="color:#f92672">==</span><span style="color:#ae81ff">3</span>,df)<span style="color:#f92672">.</span>Ladder_score,  label <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Cluster 2&#34;</span>)
+</span></span><span style="display:flex;"><span>scatter!(filter(row <span style="color:#f92672">-&gt;</span>row<span style="color:#f92672">.</span>cluster <span style="color:#f92672">==</span><span style="color:#ae81ff">2</span>,df)<span style="color:#f92672">.</span>Social_support, filter(row <span style="color:#f92672">-&gt;</span>row<span style="color:#f92672">.</span>cluster <span style="color:#f92672">==</span><span style="color:#ae81ff">2</span>,df)<span style="color:#f92672">.</span>Ladder_score,  label <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Cluster 3&#34;</span>)
+</span></span></code></pre></div><p><img src="/005_happines/cluster-scatter.png" alt="Scatter with cluster"></p>
+<p>Here are the lists in these 3 clusters:</p>
+<p><strong>Cluster 1:</strong> Australia, Austria, Canada, Denmark, Estonia, Finland, France, Germany, Hong Kong S.A.R. of China, Iceland, Ireland, Luxembourg, Malta, Netherlands, New Zealand, Norway, Singapore, Sweden, Switzerland, United Arab Emirates, United Kingdom, United States, Uzbekistan.</p>
+<p><strong>Cluster 2:</strong> Albania, Argentina, Armenia, Azerbaijan, Bahrain, Belarus, Belgium, Bolivia, Bosnia and Herzegovina, Brazil, Bulgaria, Chile, China, Colombia, Costa Rica, Croatia, Cyprus, Czech Republic, Dominican Republic, Ecuador, El Salvador, Greece, Guatemala, Honduras, Hungary, Israel, Italy, Jamaica, Japan, Kazakhstan, Kosovo, Kuwait, Kyrgyzstan, Latvia, Libya, Lithuania, Malaysia, Maldives, Mauritius, Mexico, Moldova, Mongolia, Montenegro, Nicaragua, North Cyprus, North Macedonia, Panama, Paraguay, Peru, Philippines, Poland, Portugal, Romania, Russia, Saudi Arabia, Serbia, Slovakia, Slovenia, South Korea, Spain, Taiwan Province of China, Tajikistan, Thailand, Turkey, Turkmenistan, Ukraine, Uruguay, Venezuela, Vietnam.</p>
+<p><strong>Cluster 3:</strong> Afghanistan, Algeria, Bangladesh, Benin, Botswana, Burkina Faso, Burundi, Cambodia, Cameroon, Chad, Comoros, Congo (Brazzaville), Egypt, Ethiopia, Gabon, Gambia, Georgia, Ghana, Guinea, Haiti, India, Indonesia, Iran, Iraq, Ivory Coast, Jordan, Kenya, Laos, Lebanon, Lesotho, Liberia, Madagascar, Malawi, Mali, Mauritania, Morocco, Mozambique, Myanmar, Namibia, Nepal, Niger, Nigeria, Pakistan, Palestinian Territories, Rwanda, Senegal, Sierra Leone, South Africa, Sri Lanka, Swaziland, Tanzania, Togo, Tunisia, Uganda, Yemen, Zambia, Zimbabwe.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span>histogram(filter(row <span style="color:#f92672">-&gt;</span>row<span style="color:#f92672">.</span>cluster <span style="color:#f92672">==</span><span style="color:#ae81ff">1</span>,df)<span style="color:#f92672">.</span>Ladder_score, label <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;cluster 1&#34;</span>, title <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Distribution of Happiness Score by Cluster&#34;</span>, xaxis <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Ladder Score&#34;</span>, yaxis<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;n° countries&#34;</span>)
+</span></span><span style="display:flex;"><span>histogram!(filter(row <span style="color:#f92672">-&gt;</span>row<span style="color:#f92672">.</span>cluster <span style="color:#f92672">==</span><span style="color:#ae81ff">3</span>,df)<span style="color:#f92672">.</span>Ladder_score, label <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;cluster 2&#34;</span>)
+</span></span><span style="display:flex;"><span>histogram!(filter(row <span style="color:#f92672">-&gt;</span>row<span style="color:#f92672">.</span>cluster <span style="color:#f92672">==</span><span style="color:#ae81ff">2</span>,df)<span style="color:#f92672">.</span>Ladder_score, label <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;cluster 3&#34;</span>)
+</span></span></code></pre></div><p><img src="/005_happines/distribution.png" alt="histogram happiness cluster"></p>
+<p>Finally, we can compare how this cluster affects all the variables.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#a6e22e">@df</span> float_df Plots<span style="color:#f92672">.</span>density(cols();
+</span></span><span style="display:flex;"><span>                             layout<span style="color:#f92672">=</span>N,
+</span></span><span style="display:flex;"><span>                             size<span style="color:#f92672">=</span>(<span style="color:#ae81ff">1600</span>,<span style="color:#ae81ff">1200</span>),
+</span></span><span style="display:flex;"><span>                             title<span style="color:#f92672">=</span>permutedims(numerical_cols),
+</span></span><span style="display:flex;"><span>                             group <span style="color:#f92672">=</span> df<span style="color:#f92672">.</span>cluster,
+</span></span><span style="display:flex;"><span>                             label <span style="color:#f92672">=</span> false)
+</span></span></code></pre></div><p><img src="/005_happines/distr_cluster_vars.png" alt="Distribution by variables with cluster"></p>
+<h2 id="conclusions">Conclusions</h2>
+<p>From my experience using Python for about two years in data analysis and recently dabbling with Julia, I can say that the ecosystem generally seems quite mature for this purpose. I had some questions that the community immediately answered on Julia Discourse. More content like this is needed so that the data science community can more widely adopt this technology.</p>
+</div>
+    </article>
+  </main>
+
+<section class="webring">
+  <h3>Articles from blogs I follow around the net</h3>
+  <section class="articles">
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://dm13450.github.io/2024/03/09/Calibrating-an-Ornstein-Uhlenbeck-Process.html" target="_blank" rel="noopener">Calibrating an Ornstein–Uhlenbeck Process</a>
+      </h4>
+      <p class="summary" dir="auto">Read enough quant finance papers or books and you’ll come across the Ornstein–Uhlenbeck (OU) process. This is a post that explores the OU process, the equations, how we can simulate such a process and then estimate the parameters.</p>
+      <small class="source">
+        via <a href="https://dm13450.github.io/">Dean Markwick</a>
+      </small>
+      <small class="date">March 9, 2024</small>
+    </div>
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://jarbus.net/blog/zen-in-the-art-of-beat-saber/" target="_blank" rel="noopener">Zen in the Art of Beat Saber</a>
+      </h4>
+      <p class="summary" dir="auto">Contents: Introduction, Step away, come back later, Focus, but not too much, Generalization comes after specialization, Don’t bother if you don’t need to, Let Go
+Introduction
+
+    
+        
+    
+
+I recently read Zen in the Art of Archery, which isn’t a book abou…</p>
+      <small class="source">
+        via <a href="https://jarbus.net/">jarbus.net on </a>
+      </small>
+      <small class="date">February 22, 2024</small>
+    </div>
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://drewdevault.com/2023/12/26/2023-12-26-Prusa-is-floundering.html" target="_blank" rel="noopener">Why Prusa is floundering, and how you can avoid their fate</a>
+      </h4>
+      <p class="summary" dir="auto">Prusa is a 3D printer manufacturer which has a long history of being admired by
+the 3D printing community for high quality, open source printers. They have been
+struggling as of late, and came under criticism for making the firmware of their
+Mk4 printer non-…</p>
+      <small class="source">
+        via <a href="https://drewdevault.com">Drew DeVault&#39;s blog</a>
+      </small>
+      <small class="date">December 26, 2023</small>
+    </div>
+    
+  </section>
+  <p class="attribution">
+    Generated by
+    <a href="https://git.sr.ht/~sircmpwn/openring">openring</a>
+  </p>
+</section>
+<style>
+.webring .articles {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -0.5rem;
+}
+.webring .title {
+  margin: 0;
+}
+.webring .article {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  background: #3c3836;
+  min-width: 10rem;
+}
+.webring .summary {
+  font-size: 0.8rem;
+  flex: 1 1 0;
+}
+.webring .attribution {
+  text-align: right;
+  font-size: 0.8rem;
+  color: #555;
+}
+</style>
+
+
+      </div>
+      <footer>
+  <hr />
+  
+    <p id="social">
+      Find me around the web:
+      <br />
+      
+        
+        <a href="https://github.com/indymnv">GitHub</a>
+      
+         | 
+        <a href="https://codeberg.org/indymnv">Codeberg</a>
+      
+         | 
+        <a href="https://fosstodon.org/@indymnv">Mastodon</a>
+      
+         | 
+        <a href="https://matrix.to/#/@navi93:matrix.org">Matrix</a>
+      
+    </p>
+  
+  <p class="copyright">
+    Copyright © 2024
+    <a href="https://smigle-hugo-theme.netlify.app/"><strong>Navi</strong></a>.
+    This work is licensed under the
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> license.
+  </p>
+  <p class="builtWith">
+    Built with
+    <a href="http://www.gohugo.io/">Hugo</a>,
+    using the theme
+    <a href="https://gitlab.com/ian-s-mcb/smigle-hugo-theme">smigle</a>,
+    which was influenced by the theme
+    <a href="https://github.com/sumnerevans/smol">smol</a>.
+  </p>
+</footer>
+
+    </div>
+  </body>
+</html>

@@ -1,0 +1,74 @@
+baseURL = "https://smigle-hugo-theme.netlify.app/"
+languageCode = "en-us"
+theme = "smigle"
+title = "The Tarkus Factory"
+
+[[menu.main]]
+identifier = "home"
+name = "Home"
+url = "/"
+weight = 1
+
+[[menu.main]]
+identifier = "about"
+name = "About"
+url = "/about/"
+weight = 2
+
+[[menu.main]]
+identifier = "posts"
+name = "Posts"
+url = "/posts/"
+weight = 3
+
+[[menu.main]]
+identifier = "categories"
+name = "Categories"
+url = "/categories/"
+weight = 4
+
+[[menu.main]]
+identifier = "tags"
+name = "Tags"
+url = "/tags/"
+weight = 5
+
+[[menu.main]]
+identifier = "rss"
+name = "RSS"
+url = "/index.xml"
+weight = 6
+
+[params]
+abbrDateFmt = "Jan 2"
+author = "Navi"
+brandIconFile = "images/brandIcon.svg"
+dateFmt = "2006-01-02"
+subtitle = "Navi's Personal Blog"
+math = true
+
+  [[params.social]]
+  name = "GitHub"
+  url = "https://github.com/indymnv"
+
+  [[params.social]]
+  name = "Codeberg"
+  url = "https://codeberg.org/indymnv"
+
+  [[params.social]]
+  name = "Mastodon"
+  url = "https://fosstodon.org/@indymnv"
+
+  [[params.social]]
+  name = "Matrix"
+  url = "https://matrix.to/#/@navi93:matrix.org"
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.extensions]
+      [markup.goldmark.extensions.passthrough]
+        enable = true
+        [markup.goldmark.extensions.passthrough.delimiters]
+          block = [['\[', '\]'], ['$$', '$$']]
+          inline = [['\(', '\)']]
+

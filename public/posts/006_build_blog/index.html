@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content=""
+  />
+  
+    
+      <title>Creating your own blog with Julia and Franklin | The Tarkus Factory</title>
+    
+  
+  <link rel="stylesheet" href="/css/reset.css"/>
+  <link rel="stylesheet" href="/css/font.css"/>
+  <link rel="stylesheet" href="/css/smigle.css"/>
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+</head>
+
+  <body>
+    <div id="root">
+      <header>
+  <div id="brand">
+    <a class="icon-link" href="https://smigle-hugo-theme.netlify.app/">
+      <img
+        class="icon"
+        src="/images/brandIcon.svg"
+      />
+    </a>
+    <div class="text">
+      <a href="https://smigle-hugo-theme.netlify.app/"><h1>The Tarkus Factory</h1></a>
+      <h3>Navi&#39;s Personal Blog</h3>
+    </div>
+  </div>
+  <nav>
+    
+      
+        
+        <a href="/"><b>Home</b></a>
+      
+         | 
+        <a href="/about/"><b>About</b></a>
+      
+         | 
+        <a href="/posts/"><b>Posts</b></a>
+      
+         | 
+        <a href="/categories/"><b>Categories</b></a>
+      
+         | 
+        <a href="/tags/"><b>Tags</b></a>
+      
+         | 
+        <a href="/index.xml"><b>RSS</b></a>
+      
+    
+    
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: '\\[', right: '\\]', display: true},   
+        {left: '$$', right: '$$', display: true},     
+        {left: '\\(', right: '\\)', display: false},  
+      ],
+      throwOnError : false
+    });
+  });
+</script>
+
+
+
+  
+  </nav>
+  <hr />
+</header>
+
+      <div id="content">
+        
+  <main>
+    <article>
+      <h1 class="title">Creating your own blog with Julia and Franklin</h1>
+      
+      <div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2023-08-10</time>
+    <span>in</span>
+    
+      <a href="/categories/programming">programming</a>
+  </strong>
+  <span> • 2100 words</span>
+  <span> • 10 minute read</span>
+  
+    <div>
+      Last updated on
+      <time>2024-03-16</time>
+    </div>
+  
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/tags/julia">julia</a>, 
+        <a href="/tags/blogging">blogging</a>, 
+        <a href="/tags/web-development">web development</a>
+    </div>
+  
+</div>
+
+      <div class="content"><p>In this post, we are going to discuss how to build your own blog with Julia and <a href="https://franklinjl.org/">Franklin.jl</a>, a popular static site generator among Julia users who create their own blogs or even build websites for tutorials. I hope that if you are reading this entry and you don&rsquo;t have your own space, it can motivate you to build your own website.</p>
+<h2 id="some-reasons-to-create-your-own-blog">Some Reasons to Create Your Own Blog</h2>
+<p>Blogs may sound old-fashioned, something created by people who are still living in the 90s, typing with passion about the political system while listening to Soundgarden in the background and drinking some kind of cheap beer&hellip; or programmers. And because if you are reading this content, you&rsquo;re probably at least the second one, you should consider that having a blog is a nice way to:</p>
+<ul>
+<li>Track your progress in your field</li>
+<li>Generate content that can be useful for somebody else</li>
+<li>Help the open-source community with diffusion, tutorials, etc.</li>
+<li>Create your own space and adapt it you your needs</li>
+<li>Build your personal brand and help you to find a job</li>
+</ul>
+<p>But why Franklin? Franklin is one of the most popular libraries for this purpose in Julia. It offers seamless integration with running Julia scripts so you can use julia for demostrations in your blog this coud be harder with other static site generators. If you only want to create basic entries with some code and images, perhaps Franklin.jl might not be that different from Hugo or Jekyll.</p>
+<h2 id="installation">Installation</h2>
+<p>The first step is to create a folder where you will save your project. Once you are ready, open the Julia REPL in the location where the folder should be. When it&rsquo;s ready, type <code>]</code> to activate the package manager and then type:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span>(<span style="color:#a6e22e">@v1</span><span style="color:#ae81ff">.9</span>) pkg<span style="color:#f92672">&gt;</span> add Franklin
+</span></span></code></pre></div><p>then, return to the Julia Repl and import the library:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span>julia<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">using</span> Franklin
+</span></span></code></pre></div><p>Remember to make sure you have successfully installed the Franklin library before trying to import it.</p>
+<h2 id="first-steps">First Steps</h2>
+<p>To create your website, you can choose one of the <a href="https://tlienart.github.io/FranklinTemplates.jl/">templates</a> available. In my case, I just used the basic one, but if you have a different preference, feel free to go ahead; they all follow similar structures. You can also import another template that you like more and adapt it to your website. Please read the documentation for instructions on how to do this.</p>
+<h3 id="selecting-a-template">Selecting a template</h3>
+<p>Once you have decided your template, type in the REPL the next instruction</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span>julia<span style="color:#f92672">&gt;</span> newsite(<span style="color:#e6db74">&#34;myBlog&#34;</span>, template<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;basic&#34;</span>) <span style="color:#75715e">#you can choose another name and template</span>
+</span></span></code></pre></div><p>This will create a folder with various directories and elements. It will also activate the environment inside the project. So, if you verify the project with <code>]</code>, it should display the name of your project.</p>
+<pre tabindex="0"><code>.
+├── 404.md            # Page for error 404
+├── Manifest.toml     # The typical toml files for Julia development project
+├── Project.toml
+├── __site            # Generate your full website.
+├── _assets           # You can add pictures and images here
+├── _css              # All related to styling your website
+├── _layout           # All related to the structure of your website
+├── _libs             # Here will go all elements for website like katex, searchbar, etc  
+├── _rss              # A couple of files related to rss feed, 
+├── config.md         # Set Global variables for your website
+├── index.md          # Main landing page
+├── pages.md          # All your pages / you can create your folder or organize in different way
+└── utils.jl          # Julia File for setting some configurations
+</code></pre><p>Finally type:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span>julia<span style="color:#f92672">&gt;</span> serve()
+</span></span></code></pre></div><p>It should open your website locally in the browser, and it should look exactly the same as the template website you chose.</p>
+<p><img src="/006_build_blog/white_blog.png" alt="starting template"></p>
+<p>From this point, it&rsquo;s time to delete some files and content. You might also want to add some pages for your projects, about, contact, etc. This is up to you, but for now, we are going to keep just 2 pages: one for the main &ldquo;about&rdquo; page and another to host all your posts.</p>
+<h3 id="cleaning-the-template">Cleaning the template</h3>
+<p>Now, go to the &ldquo;index.md&rdquo; page and delete all its content. This page will become your main page, and you can mix HTML and Markdown in this file to add whatever you want to it.</p>
+<pre tabindex="0"><code>
+# Welcome to my blog
+## I am using Franklin
+
+~~~
+    &lt;img src=&#34;/assets/rndimg.jpg&#34; height=&#34;300&#34; class=&#34;main-picture&#34; &gt;
+    &lt;p&gt;
+    &lt;p&gt;
+~~~
+
+
+This is an introductory message 
+</code></pre><p>You might have noticed that in our main page, there are four links to different pages. You can choose to keep those links or delete them all. However, for the purpose of creating a blog section, let&rsquo;s use one of those links. To do that, follow these steps:</p>
+<ol>
+<li>Go to the &ldquo;header.html&rdquo; file located in the &ldquo;layout&rdquo; folder.</li>
+<li>Modify the code in the &ldquo;header.html&rdquo; file to something like this:</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">header</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;blog-name&#34;</span>&gt;&lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/&#34;</span>&gt;&lt;/<span style="color:#f92672">a</span>&gt;Amazing Blog&lt;/<span style="color:#f92672">div</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">nav</span>&gt;
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#f92672">ul</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">li</span>&gt;&lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/&#34;</span>&gt;Home&lt;/<span style="color:#f92672">a</span>&gt;&lt;/<span style="color:#f92672">li</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">li</span>&gt;&lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/menu1/&#34;</span>&gt;Blog&lt;/<span style="color:#f92672">a</span>&gt;&lt;/<span style="color:#f92672">li</span>&gt;
+</span></span><span style="display:flex;"><span>  &lt;/<span style="color:#f92672">ul</span>&gt;
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#f92672">img</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/assets/hamburger.svg&#34;</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;menu-icon&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">nav</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">header</span>&gt;
+</span></span></code></pre></div><p>If you&rsquo;re looking to change the background color to something more interesting than white, now is the time to showcase your frontend skills. Follow these steps:</p>
+<ol>
+<li>Navigate to the &ldquo;franklin.css&rdquo; file.</li>
+<li>In the first block of code, add the background color that you prefer. For instance:</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-css" data-lang="css"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>:<span style="color:#a6e22e">root</span> {
+</span></span><span style="display:flex;"><span>  --block-background: hsl(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span><span style="color:#66d9ef">%</span>, <span style="color:#ae81ff">94</span><span style="color:#66d9ef">%</span>);
+</span></span><span style="display:flex;"><span>  --output-background: hsl(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span><span style="color:#66d9ef">%</span>, <span style="color:#ae81ff">98</span><span style="color:#66d9ef">%</span>);
+</span></span><span style="display:flex;"><span>  --small: <span style="color:#ae81ff">14</span><span style="color:#66d9ef">px</span>;
+</span></span><span style="display:flex;"><span>  --normal: <span style="color:#ae81ff">19</span><span style="color:#66d9ef">px</span>;
+</span></span><span style="display:flex;"><span>  --text-color: <span style="color:#a6e22e">hsv</span>(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span><span style="color:#66d9ef">%</span>, <span style="color:#ae81ff">20</span><span style="color:#66d9ef">%</span>);
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">background-color</span>: <span style="color:#66d9ef">aqua</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Finally, after making these modifications, the result should look something like this:</p>
+<p><img src="/006_build_blog/frontend_master.png" alt="frontend"></p>
+<h3 id="creating-your-first-post">Creating your first post</h3>
+<p>Now, if you&rsquo;re ready to start your own blog, here&rsquo;s how you can set up the &ldquo;posts&rdquo; folder to add your articles, create a new folder named &ldquo;posts&rdquo; in the same root directory as your other folders. Is important to consider this things.</p>
+<ul>
+<li>Inside the &ldquo;posts&rdquo; folder, you can add all your articles. You have the flexibility to use both Markdown files and HTML files for your articles.</li>
+<li>If you&rsquo;re doing literate programming with tools like Pluto or Jupyter, you can export your notebooks to HTML format and place them in the &ldquo;posts&rdquo; folder. This way, anyone can easily view your data science projects.</li>
+</ul>
+<p>For now, let&rsquo;s add a file called <code>test1.md</code> inside the <code>posts</code> folder and you can add some text</p>
+<pre tabindex="0"><code># This is a title in my first post
+ 
+So I can write anything
+
+## Here is an introduction
+
+We are going to write some code:
+
+using LinearAlgebra
+a = [1, 2, 3, 3, 4, 5, 2, 2]
+@show dot(a, a)
+println(dot(a, a))
+</code></pre><p>Then, go to the <code>menu1.md</code> file, erase the remaining content, and create a link to the <code>test1.md</code> file. This is as simple as:</p>
+<pre tabindex="0"><code>* [This is the title of my blog](../posts/test1)
+</code></pre><p>If you save it, and navigate to <code>http://localhost:8000/posts/test1/</code>, you should see your post displayed clearly. This page will include your &ldquo;about&rdquo; section and the space to write your blog content. Congratulations! You now have a basic understanding of how Franklin works and can make any further edits or modifications you desire.</p>
+<p>If you wish to further style your website, please go ahead and customize it to your heart&rsquo;s content.</p>
+<h2 id="deployment">Deployment</h2>
+<p>Now it&rsquo;s time to host your website in some place. One of the most straightforward options is using GitHub. Here&rsquo;s how you can do it:</p>
+<ol>
+<li>
+<p><strong>Create a Repository</strong>: Go to your GitHub account and create an empty repository. When entering the name of your project, you have two paths to choose from:</p>
+<p>a. If this is a personal website or organization, the name of your project should be something like <code>username.github.io</code>.</p>
+<p>b. You can create your own custom name for your project, like <code>myblog</code>.</p>
+</li>
+</ol>
+<p>If you&rsquo;re unsure which option to choose, I recommend going with option (a) because it&rsquo;s more straightforward. If you choose option (b), you&rsquo;ll need to define a <code>prepath</code> variable in your <code>config.md</code> with the name of that project. For instance: <code>@def prepath = &quot;myblog&quot;</code>.</p>
+<ol start="2">
+<li>
+<p><strong>Upload Your Project</strong>: Now upload your project to GitHub, following the instructions in your repository.</p>
+</li>
+<li>
+<p><strong>Configure GitHub Pages</strong>: Once you&rsquo;ve pushed your project, go to the <code>Settings</code> tab in your repository. Then navigate to <code>GitHub Pages</code>. In the Source dropdown, select <code>gh-pages</code>. If you see a message indicating success, your project is now live.</p>
+</li>
+<li>
+<p><strong>Check Your Website</strong>: You can now open your web browser and enter the link of your project, which would be <code>username.github.io</code>. If you can see your website, congratulations! Your blog is now live on the internet.</p>
+</li>
+</ol>
+<p>By following these steps, you&rsquo;ve successfully hosted your Franklin-generated website on GitHub Pages. It&rsquo;s now accessible to anyone with the link, and you can share your content with the world.</p>
+<h3 id="hosting-in-a-different-domain-optional">Hosting in a different domain (optional)</h3>
+<p>If you&rsquo;re hesitant to share your GitHub username due to its lengthy or unconventional extension, or if you prefer a more professional-looking link, you might want to consider an alternative domain, such as .com or .dev. You can purchase a domain and link it to your website. For example, you can use services like Google Domains to find and purchase a domain that suits your preference.</p>
+<p>Once you&rsquo;ve found and acquired the domain you like, you can proceed to link it to your website. To do this, you need to configure the DNS settings. You can find detailed explanations about custom domains and GitHub Pages in the <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages">documentation</a>. In a nutshell, follow these steps:</p>
+<ol>
+<li>Go to Google Domains, select your domain, and navigate to the DNS section.</li>
+<li>Configure the DNS records, as shown below:</li>
+</ol>
+<p><img src="/006_build_blog/dns_setup.png" alt="dns_setup"></p>
+<ol start="3">
+<li>After correctly setting up the DNS records, go to your GitHub project repository&rsquo;s settings, then navigate to Pages and enter your custom domain:</li>
+</ol>
+<p><img src="/006_build_blog/custom_domain.png" alt="custom_domain"></p>
+<ol start="4">
+<li>If everything is set up correctly, GitHub will confirm the configuration. In a few minutes, your website should become accessible via your new custom domain.</li>
+</ol>
+<p>By following these steps, you&rsquo;ll be able to link a custom domain to your Franklin-generated website, providing a more personalized and professional web presence.</p>
+<h2 id="rss-and-tags">RSS and Tags</h2>
+<p>Now that your website is up and running, setting up an RSS feed is important for people who want to stay updated on your new articles without having to visit your website daily. Tools like Newsboat or Inoreader help users keep track of updates from various websites, making an RSS feed a valuable addition to your blog.</p>
+<p>Thankfully, Franklin makes setting up an RSS feed quite simple. All you need to do is go to each page in your &ldquo;posts&rdquo; folder and add a small description within <code>+++</code> brackets, like this:</p>
+<pre tabindex="0"><code>+++
+tags = [&#34;Julia&#34;, &#34;Writing&#34;] 
+
+rss_title = &#34;Creating your own blog with Julia and Franklin&#34;
+rss_description = &#34;Describing the steps to create your own blog, so you can stop posting your code on Instagram&#34;
+rss_pubdate = Date(2023, 8, 10) 
++++
+</code></pre><p>The RSS fields you add will be included in the information extracted by platforms like Newsboat. From these applications, I can read the title, a brief description, and the publication date and all the content if it&rsquo;s available. Additionally, you&rsquo;ll notice a &ldquo;tags&rdquo; section. This is also important because it allows users to filter by topics. For example, if you write different blogs about topics ranging from Julia programming to analysis of Shakira&rsquo;s new songs, users can select the topics they&rsquo;re specifically interested in.</p>
+<p>To share your blog&rsquo;s RSS feed, you&rsquo;ll need a URL like <code>https://www.yourdomain.com/feed.xml</code>. Make sure to prominently display this URL in your website so that readers can easily find and subscribe to your feed.</p>
+<h3 id="host-your-feed-to-juliabloggers-optional">Host your Feed to JuliaBloggers (optional)</h3>
+<p>Lastly, if you&rsquo;re considering writing about Julia and want to contribute to the community, don&rsquo;t hesitate to share your work. Whether it&rsquo;s a calculator project, a website, a 2D game, or a cutting-edge machine learning algorithm, your contributions will help the Julia community grow and provide valuable insights for others to learn from.</p>
+<p>Visit the <a href="https://www.juliabloggers.com/julia-bloggers-submit-feed/">JuliaBloggers Website</a> and add your information. In the &ldquo;Feed URL&rdquo; field, you can use a URL similar to the first example you mentioned, like:</p>
+<ul>
+<li><code>http://indymnv.dev/tag/julia/feed/</code></li>
+</ul>
+<p>Once you&rsquo;ve submitted this information, every time you publish a new post on your website, the community will be able to see it. If you want to test this process first, you can use an RSS reader like Newsboat or Inoreader to ensure that your updates are being picked up as expected.</p>
+<h2 id="conclusions">Conclusions</h2>
+<p>I hope you enjoyed reading this article. If you haven&rsquo;t yet created your own website, I hope it serves as motivation to get started, whether you choose to use Franklin or another static site generator. Having your own online space to write about your interests and dive as deep as you like is a rewarding endeavor. Don&rsquo;t hesitate to embark on this journey and create a platform that showcases your passion and expertise. Happy blogging!</p>
+<h2 id="acknowledgment">Acknowledgment</h2>
+<p>I also want to thank Thibaut Lienart, who is the main developer of Franklin. His work has been incredibly beneficial for the community.</p>
+</div>
+    </article>
+  </main>
+
+<section class="webring">
+  <h3>Articles from blogs I follow around the net</h3>
+  <section class="articles">
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://dm13450.github.io/2024/03/09/Calibrating-an-Ornstein-Uhlenbeck-Process.html" target="_blank" rel="noopener">Calibrating an Ornstein–Uhlenbeck Process</a>
+      </h4>
+      <p class="summary" dir="auto">Read enough quant finance papers or books and you’ll come across the Ornstein–Uhlenbeck (OU) process. This is a post that explores the OU process, the equations, how we can simulate such a process and then estimate the parameters.</p>
+      <small class="source">
+        via <a href="https://dm13450.github.io/">Dean Markwick</a>
+      </small>
+      <small class="date">March 9, 2024</small>
+    </div>
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://jarbus.net/blog/zen-in-the-art-of-beat-saber/" target="_blank" rel="noopener">Zen in the Art of Beat Saber</a>
+      </h4>
+      <p class="summary" dir="auto">Contents: Introduction, Step away, come back later, Focus, but not too much, Generalization comes after specialization, Don’t bother if you don’t need to, Let Go
+Introduction
+
+    
+        
+    
+
+I recently read Zen in the Art of Archery, which isn’t a book abou…</p>
+      <small class="source">
+        via <a href="https://jarbus.net/">jarbus.net on </a>
+      </small>
+      <small class="date">February 22, 2024</small>
+    </div>
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://drewdevault.com/2023/12/26/2023-12-26-Prusa-is-floundering.html" target="_blank" rel="noopener">Why Prusa is floundering, and how you can avoid their fate</a>
+      </h4>
+      <p class="summary" dir="auto">Prusa is a 3D printer manufacturer which has a long history of being admired by
+the 3D printing community for high quality, open source printers. They have been
+struggling as of late, and came under criticism for making the firmware of their
+Mk4 printer non-…</p>
+      <small class="source">
+        via <a href="https://drewdevault.com">Drew DeVault&#39;s blog</a>
+      </small>
+      <small class="date">December 26, 2023</small>
+    </div>
+    
+  </section>
+  <p class="attribution">
+    Generated by
+    <a href="https://git.sr.ht/~sircmpwn/openring">openring</a>
+  </p>
+</section>
+<style>
+.webring .articles {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -0.5rem;
+}
+.webring .title {
+  margin: 0;
+}
+.webring .article {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  background: #3c3836;
+  min-width: 10rem;
+}
+.webring .summary {
+  font-size: 0.8rem;
+  flex: 1 1 0;
+}
+.webring .attribution {
+  text-align: right;
+  font-size: 0.8rem;
+  color: #555;
+}
+</style>
+
+
+      </div>
+      <footer>
+  <hr />
+  
+    <p id="social">
+      Find me around the web:
+      <br />
+      
+        
+        <a href="https://github.com/indymnv">GitHub</a>
+      
+         | 
+        <a href="https://codeberg.org/indymnv">Codeberg</a>
+      
+         | 
+        <a href="https://fosstodon.org/@indymnv">Mastodon</a>
+      
+         | 
+        <a href="https://matrix.to/#/@navi93:matrix.org">Matrix</a>
+      
+    </p>
+  
+  <p class="copyright">
+    Copyright © 2024
+    <a href="https://smigle-hugo-theme.netlify.app/"><strong>Navi</strong></a>.
+    This work is licensed under the
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> license.
+  </p>
+  <p class="builtWith">
+    Built with
+    <a href="http://www.gohugo.io/">Hugo</a>,
+    using the theme
+    <a href="https://gitlab.com/ian-s-mcb/smigle-hugo-theme">smigle</a>,
+    which was influenced by the theme
+    <a href="https://github.com/sumnerevans/smol">smol</a>.
+  </p>
+</footer>
+
+    </div>
+  </body>
+</html>

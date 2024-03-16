@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>slice of life on The Tarkus Factory</title>
+    <link>https://smigle-hugo-theme.netlify.app/categories/slice-of-life/</link>
+    <description>Recent content in slice of life on The Tarkus Factory</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 21 Sep 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://smigle-hugo-theme.netlify.app/categories/slice-of-life/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>From Mastodon to Free software: My little experience</title>
+      <link>https://smigle-hugo-theme.netlify.app/posts/008_free_software/</link>
+      <pubDate>Thu, 21 Sep 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://smigle-hugo-theme.netlify.app/posts/008_free_software/</guid>
+      <description>Introduction It has been a while since I decided to purge several of my social networks (including Twitter, Facebook, Instagram, and LinkedIn) and mainly stick to Mastodon as the only platform for interacting with people on the internet whom I don&amp;rsquo;t really know. So far, it has been a positive experience, and I have no doubts that it has improved my quality of life. Furthermore, it has opened up a world that I wasn&amp;rsquo;t very aware of and that I have become increasingly interested in: The world of Free software.</description>
+    </item>
+    
+    <item>
+      <title>Why have I decided to open a blog?</title>
+      <link>https://smigle-hugo-theme.netlify.app/posts/001_publish/</link>
+      <pubDate>Wed, 05 Oct 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://smigle-hugo-theme.netlify.app/posts/001_publish/</guid>
+      <description>Introduction The purpose of starting this blog is to create a space where I can write about topics that interest me related to technology, the world of quantitative methods for decision making, programming, among others.
+But why create a blog, if there are so many spaces out there that are more convenient than building one? The truth is, I wanted to have a more independent space and not too comfortable on third parties (nor benefit them), although there are spaces like Twitter (which seems to be in greater decline every day) or Medium, I simply thought that the best thing I could do is to have a personal space, and given that the dream of owning a house seems to be increasingly distant for my generation, well at least I can settle for having a blog, right?</description>
+    </item>
+    
+  </channel>
+</rss>

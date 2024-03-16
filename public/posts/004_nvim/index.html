@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content=""
+  />
+  
+    
+      <title>set up NeoVim &#43; Tmux for a Data Science Workflow with Julia | The Tarkus Factory</title>
+    
+  
+  <link rel="stylesheet" href="/css/reset.css"/>
+  <link rel="stylesheet" href="/css/font.css"/>
+  <link rel="stylesheet" href="/css/smigle.css"/>
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+</head>
+
+  <body>
+    <div id="root">
+      <header>
+  <div id="brand">
+    <a class="icon-link" href="https://smigle-hugo-theme.netlify.app/">
+      <img
+        class="icon"
+        src="/images/brandIcon.svg"
+      />
+    </a>
+    <div class="text">
+      <a href="https://smigle-hugo-theme.netlify.app/"><h1>The Tarkus Factory</h1></a>
+      <h3>Navi&#39;s Personal Blog</h3>
+    </div>
+  </div>
+  <nav>
+    
+      
+        
+        <a href="/"><b>Home</b></a>
+      
+         | 
+        <a href="/about/"><b>About</b></a>
+      
+         | 
+        <a href="/posts/"><b>Posts</b></a>
+      
+         | 
+        <a href="/categories/"><b>Categories</b></a>
+      
+         | 
+        <a href="/tags/"><b>Tags</b></a>
+      
+         | 
+        <a href="/index.xml"><b>RSS</b></a>
+      
+    
+    
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: '\\[', right: '\\]', display: true},   
+        {left: '$$', right: '$$', display: true},     
+        {left: '\\(', right: '\\)', display: false},  
+      ],
+      throwOnError : false
+    });
+  });
+</script>
+
+
+
+  
+  </nav>
+  <hr />
+</header>
+
+      <div id="content">
+        
+  <main>
+    <article>
+      <h1 class="title">set up NeoVim &#43; Tmux for a Data Science Workflow with Julia</h1>
+      
+      <div class="post-meta">
+  <strong>
+    <span>Posted on</span>
+    <time>2023-07-04</time>
+    <span>in</span>
+    
+      <a href="/categories/technology">technology</a>, 
+      <a href="/categories/programming">programming</a>
+  </strong>
+  <span> • 1531 words</span>
+  <span> • 8 minute read</span>
+  
+    <div>
+      Last updated on
+      <time>2024-03-16</time>
+    </div>
+  
+  
+    <div>
+      <span>Tags:</span>
+      
+        <a href="/tags/julia">julia</a>, 
+        <a href="/tags/data-science">data science</a>, 
+        <a href="/tags/python">python</a>, 
+        <a href="/tags/r">r</a>, 
+        <a href="/tags/vim">vim</a>, 
+        <a href="/tags/tooling">tooling</a>, 
+        <a href="/tags/tmux">tmux</a>
+    </div>
+  
+</div>
+
+      <div class="content"><p><img src="/love-neovim.jpeg" alt="love neovim"></p>
+<p>In this post, I will provide some notes on getting started with Neovim for a Data Science Workflow. This setup is not strictly related to Julia and can also be used with Python and R. The idea is to work with a double panel structure, where one side contains your code and the other side has the REPL, which receives the snippets of code you send from the code side.</p>
+<p>In this blog, I will mention the things you can add to make it comfortable for data analysis or more serious development. With this typical kick starter in Neovim and Tmux, I will explain some changes and new packages that are important for this purpose. Finally, I will dive into the details that still need improvement.</p>
+<h2 id="why-start-using-neovim-and-tmux-my-motivations">Why start using Neovim and Tmux? My motivations</h2>
+<p>I must say, I like notebooks. I used them extensively in my first job in analytics, and they really helped me dive into the problem and experiment with different use cases. I have also worked with VSCode, although I am not a big fan of it, it has helped me in some specific use cases where a more &ldquo;software engineering&rdquo; perspective is needed.</p>
+<p>With that in mind, when I read the book &ldquo;Approaching Almost Any Machine Learning Problem&rdquo; by Abhishek Thakur, and then watched the controversial and yet funny conference by Joel Grus on why he <a href="https://www.youtube.com/watch?v=7jiPeIFXb6U&amp;ab_channel=O%27Reilly">dislikes notebooks</a>, I started to think deeply about the perspective of writing software that follows good practices, is expressive, and still easy to prototype. Unfortunately, I think Grus is right about it. Working with notebooks can lead to some weird behaviors, like running cells in different positions, populating your analysis with too much unnecessary information and plots, not creating abstractions when needed, and having issues with reproducibility. On the other hand, the script perspective didn&rsquo;t help me with fast iteration when I needed quick answers to simple questions.</p>
+<p>When I moved to Julia, I realized that the REPL is in another level, and I understood that an important part of this community uses (Neo)Vim or Emacs for development. I was curious about using these tools for data science projects. Although there are not many articles about it, and the community using Vim/Emacs is quite small compared to other options, I found it pretty cool because it is minimalistic (though you can customize it extensively), fast, and promises to increase productivity after mastering the Vim keybindings (in 10 years).</p>
+<p>What I realized is that you can still prototype like notebooks (but with a perspective closer to RStudio) with one pane for your code and another pane with your REPL open. Then, you can start transforming your code to make it look like serious software, all within one window without moving all the .ipynb file contents to another .py or .jl file. I found this workflow more enjoyable.</p>
+<h2 id="instalation-process-required">Instalation process required</h2>
+<p>First of all, make sure to install Neovim and Tmux. There are plenty of tutorials out there on this topic, so I won&rsquo;t go into the details here.</p>
+<p>The important thing is to create an init.lua file. If you don&rsquo;t want to install everything one by one, I recommend following the  <a href="https://github.com/nvim-lua/kickstart.nvim">kick starter</a>, provided by nvim-lua/kickstart.nvim. It provides the basic tools for working with Neovim, including a package manager, Treesitter, LSP integration, etc. This kickstarter uses LazyVim, which should be faster and doesn&rsquo;t require frequent updates like PackerNvim. Just create the init.lua file, copy and paste all the content into that file, save it, and quit. When you open it again, it should start installing or upgrading everything.</p>
+<p>Also you want to create a Tmux config, the default config in Tmux is already ok for working with Data Science or the Julia experience, but anyway you would want to edit a file for setting a colorscheme or edit some shortcuts, to create just add <code>~/.tmux.conf</code></p>
+<p>You also want to create a Tmux config file. The default config in Tmux is already suitable for working with Data Science or the Julia experience, but you may want to edit it to set a colorscheme or modify some shortcuts. Just add <code>~/.tmux.conf</code> to create the file.</p>
+<h2 id="editing-the-initlua-and-tmuxconfig">Editing the init.lua and tmux.config</h2>
+<p>Here are the things required for editing the init.lua file:</p>
+<ol>
+<li>Add Julia in the init.lua for <a href="https://github.com/nvim-lua/kickstart.nvim/blob/master/init.lua#L309">treesitter</a> and also consider to add the julials = {} for <a href="https://github.com/nvim-lua/kickstart.nvim/blob/master/init.lua#L427">local servers</a></li>
+<li>Make sure to add the sysimage for the languageserver. in this <a href="https://discourse.julialang.org/t/neovim-languageserver-jl/37286/83?page=5">discussion</a>, they summarize the procedures well, Follow the instructions and add the snippet of code to your init.lua</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#f92672">--</span> Run Julia LSP
+</span></span><span style="display:flex;"><span>require<span style="color:#f92672">&#39;</span>lspconfig<span style="color:#f92672">&#39;.</span>julials<span style="color:#f92672">.</span><span style="color:#66d9ef">setup</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">on_new_config</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>(<span style="color:#66d9ef">new_config</span>, <span style="color:#66d9ef">_</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">local</span> <span style="color:#66d9ef">julia</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">vim</span><span style="color:#f92672">.</span><span style="color:#66d9ef">fn</span><span style="color:#f92672">.</span><span style="color:#66d9ef">expand</span>(<span style="color:#e6db74">&#34;~/.julia/environments/nvim-lspconfig/bin/julia&#34;</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#66d9ef">require</span><span style="color:#f92672">&#39;</span><span style="color:#66d9ef">lspconfig</span><span style="color:#f92672">&#39;.</span><span style="color:#66d9ef">util</span><span style="color:#f92672">.</span><span style="color:#66d9ef">path</span><span style="color:#f92672">.</span><span style="color:#66d9ef">is_file</span>(<span style="color:#66d9ef">julia</span>) <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>	    <span style="color:#f92672">--</span> <span style="color:#66d9ef">vim</span><span style="color:#f92672">.</span><span style="color:#66d9ef">notify</span>(<span style="color:#e6db74">&#34;Hello!&#34;</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">new_config</span><span style="color:#f92672">.</span><span style="color:#66d9ef">cmd</span>[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> <span style="color:#66d9ef">julia</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ol start="3">
+<li>
+<p>This should be enough for setting up Julia. If you open a Julia file, Neovim should be able to detect the LSP and work with other properties like jump to definition, etc. For R and Python, this should be a bit more straightforward for now (not need step 2).</p>
+</li>
+<li>
+<p>There are other things you want to add, for a data science project, one is <a href="https://github.com/jpalardy/vim-slime">vim-slime</a>, This package is great for sending snippets of code from your file to a Julia REPL. Make sure to install it and add the following code to your init.lua. This will allow you to open a Tmux pane and start interacting with the file. You can modify the snippet below to change your target_pane (if you prefer the REPL on your left side or above, you can change this). The actual shortcut is Ctrl-c + Ctrl-c, which you can modify if you prefer.</p>
+</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span>vim<span style="color:#f92672">.</span>g<span style="color:#f92672">.</span>slime_target <span style="color:#f92672">=</span> <span style="color:#960050;background-color:#1e0010">&#39;</span>tmux<span style="color:#f92672">&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">--</span> vim<span style="color:#f92672">.</span>g<span style="color:#f92672">.</span>slime_default_config <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#34;socket_name&#34;</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;default&#34;</span>, <span style="color:#e6db74">&#34;target_pane&#34;</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;{last}&#34;</span>}
+</span></span><span style="display:flex;"><span>vim<span style="color:#f92672">.</span>g<span style="color:#f92672">.</span>slime_default_config <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">--</span> <span style="color:#66d9ef">Lua</span> <span style="color:#66d9ef">doesn</span><span style="color:#f92672">&#39;</span><span style="color:#66d9ef">t</span> <span style="color:#66d9ef">have</span> <span style="color:#66d9ef">a</span> <span style="color:#66d9ef">string</span> <span style="color:#66d9ef">split</span> <span style="color:#66d9ef">function!</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">socket_name</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">vim</span><span style="color:#f92672">.</span><span style="color:#66d9ef">api</span><span style="color:#f92672">.</span><span style="color:#66d9ef">nvim_eval</span>(<span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#66d9ef">get</span>(<span style="color:#66d9ef">split</span>(<span style="color:#f92672">$</span><span style="color:#66d9ef">TMUX</span>, <span style="color:#e6db74">&#34;,&#34;</span>), <span style="color:#ae81ff">0</span>)<span style="color:#f92672">&#39;</span>),
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">target_pane</span> <span style="color:#f92672">=</span> <span style="color:#960050;background-color:#1e0010">&#39;</span>{<span style="color:#66d9ef">top</span><span style="color:#f92672">-</span><span style="color:#66d9ef">right</span>}<span style="color:#960050;background-color:#1e0010">&#39;</span>,
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ol start="5">
+<li>For Tmux, there are some things you can add. Here is my config, which is really simple. However, I encourage you to find your own taste with Tmux.</li>
+</ol>
+<pre tabindex="0"><code>set -g mouse on
+set -g history-limit 102400
+set -g base-index 1
+set -g pane-base-index 1
+set -g renumber-windows on
+
+unbind C-b
+set -g prefix C-x
+
+# vim key movements between panes
+# smart pane switching with awareness of vim splits
+bind h select-pane -L
+bind j select-pane -D
+bind k select-pane -U
+bind l select-pane -R
+# reloading for now:w
+
+unbind r 
+bind r source-file ~/.tmux.conf \; display &#34;Reloaded ~/.tmux.conf&#34;
+# plugin
+# Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
+
+set -g @plugin &#39;egel/tmux-gruvbox&#39;
+set -g @tmux-gruvbox &#39;dark&#39; # or &#39;light&#39;
+run &#39;~/.tmux/plugins/tpm/tpm&#39;
+</code></pre><p>For this purpose, I have considered the following in my Tmux config: activate the mouse, increase the history limit in the panes (this is necessary because the default limit in Tmux is quite constrained), count from 1 with panes, change the prefix (I found it easier to use Ctrl-x rather than Ctrl-b), and add the keybindings to move between paneslike vim. The r shortcut is used to restart the config file when you add or modify features, so you can use prefix + r to apply your changes. Finally, in Tmux, you can use a package manager called TPM. Make sure to added in your config file.</p>
+<h2 id="some-challenges-for-improving-the-workflow">Some challenges for improving the workflow</h2>
+<p>So far, the workflow with Neovim and Tmux has been set up nicely. However, there are some areas that can be improved. One of them is the visualization aspect. As a data scientist, you need to constantly iterate and visualize your data. If you want to have a deep understanding of your dataset and generate plenty of visualizations, the current setup may not be the best. However, in Julia, you can easily switch to Pluto to display all the figures you want. One thing I have tried is to constantly display those plots you are working on inside the terminal. One way to do this is by using <a href="https://github.com/JuliaPlots/UnicodePlots.jl">unicodeplots</a>. If you like working with Plots.jl, you can change your backend from gr() to unicodeplots(). In my opinion, the quality of the visualization may not be the best, but it allows for instant plots in your terminal without the need for third-party software. For fast iteration, it is good enough.</p>
+<p>Another important point to consider is maintaining consistency in the workflow between Julia code and the Julia REPL. Currently, I have a workflow with Vim and my code, but the REPL follows a different logic. This is where the aforementioned repository could potentially help, as it aims to bridge the gap and maintain homogeneity between the two panels. Integrating Vim keybindings into the <a href="https://github.com/caleb-allen/VimBindings.jl">REPL</a> would provide a seamless experience, allowing for a smoother transition and enhancing the overall workflow. It is definitely an area I look forward to exploring in the future to further improve my development process.</p>
+<h2 id="conclusions">Conclusions</h2>
+<p>In this blog, I have explained how to set up Neovim and Tmux with Julia (or any other data science programming language). This setup provides a minimalist perspective. For people who like to have a variety of tools at hand, it may feel a bit lacking. However, if you are someone who is looking for a lightweight tool, minimalistic design, and enjoys working within the terminal, I highly recommend giving it a try.</p>
+</div>
+    </article>
+  </main>
+
+<section class="webring">
+  <h3>Articles from blogs I follow around the net</h3>
+  <section class="articles">
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://dm13450.github.io/2024/03/09/Calibrating-an-Ornstein-Uhlenbeck-Process.html" target="_blank" rel="noopener">Calibrating an Ornstein–Uhlenbeck Process</a>
+      </h4>
+      <p class="summary" dir="auto">Read enough quant finance papers or books and you’ll come across the Ornstein–Uhlenbeck (OU) process. This is a post that explores the OU process, the equations, how we can simulate such a process and then estimate the parameters.</p>
+      <small class="source">
+        via <a href="https://dm13450.github.io/">Dean Markwick</a>
+      </small>
+      <small class="date">March 9, 2024</small>
+    </div>
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://jarbus.net/blog/zen-in-the-art-of-beat-saber/" target="_blank" rel="noopener">Zen in the Art of Beat Saber</a>
+      </h4>
+      <p class="summary" dir="auto">Contents: Introduction, Step away, come back later, Focus, but not too much, Generalization comes after specialization, Don’t bother if you don’t need to, Let Go
+Introduction
+
+    
+        
+    
+
+I recently read Zen in the Art of Archery, which isn’t a book abou…</p>
+      <small class="source">
+        via <a href="https://jarbus.net/">jarbus.net on </a>
+      </small>
+      <small class="date">February 22, 2024</small>
+    </div>
+    
+    <div class="article">
+      <h4 class="title" dir="auto">
+        <a href="https://drewdevault.com/2023/12/26/2023-12-26-Prusa-is-floundering.html" target="_blank" rel="noopener">Why Prusa is floundering, and how you can avoid their fate</a>
+      </h4>
+      <p class="summary" dir="auto">Prusa is a 3D printer manufacturer which has a long history of being admired by
+the 3D printing community for high quality, open source printers. They have been
+struggling as of late, and came under criticism for making the firmware of their
+Mk4 printer non-…</p>
+      <small class="source">
+        via <a href="https://drewdevault.com">Drew DeVault&#39;s blog</a>
+      </small>
+      <small class="date">December 26, 2023</small>
+    </div>
+    
+  </section>
+  <p class="attribution">
+    Generated by
+    <a href="https://git.sr.ht/~sircmpwn/openring">openring</a>
+  </p>
+</section>
+<style>
+.webring .articles {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -0.5rem;
+}
+.webring .title {
+  margin: 0;
+}
+.webring .article {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  background: #3c3836;
+  min-width: 10rem;
+}
+.webring .summary {
+  font-size: 0.8rem;
+  flex: 1 1 0;
+}
+.webring .attribution {
+  text-align: right;
+  font-size: 0.8rem;
+  color: #555;
+}
+</style>
+
+
+      </div>
+      <footer>
+  <hr />
+  
+    <p id="social">
+      Find me around the web:
+      <br />
+      
+        
+        <a href="https://github.com/indymnv">GitHub</a>
+      
+         | 
+        <a href="https://codeberg.org/indymnv">Codeberg</a>
+      
+         | 
+        <a href="https://fosstodon.org/@indymnv">Mastodon</a>
+      
+         | 
+        <a href="https://matrix.to/#/@navi93:matrix.org">Matrix</a>
+      
+    </p>
+  
+  <p class="copyright">
+    Copyright © 2024
+    <a href="https://smigle-hugo-theme.netlify.app/"><strong>Navi</strong></a>.
+    This work is licensed under the
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> license.
+  </p>
+  <p class="builtWith">
+    Built with
+    <a href="http://www.gohugo.io/">Hugo</a>,
+    using the theme
+    <a href="https://gitlab.com/ian-s-mcb/smigle-hugo-theme">smigle</a>,
+    which was influenced by the theme
+    <a href="https://github.com/sumnerevans/smol">smol</a>.
+  </p>
+</footer>
+
+    </div>
+  </body>
+</html>
