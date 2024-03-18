@@ -42,7 +42,7 @@ weight = 6
 [params]
 abbrDateFmt = "Jan 2"
 author = "Navi"
-brandIconFile = "images/brandIcon.svg"
+brandIconFile = "new_logo.png"
 dateFmt = "2006-01-02"
 subtitle = "Navi's Personal Blog"
 math = true
