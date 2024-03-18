@@ -1,7 +1,7 @@
 baseURL = "https://indymnv.dev/"
 languageCode = "en-us"
 theme = "smigle"
-title = "The Tarkus Factory"
+title = "The Junk Factory"
 
 [[menu.main]]
 identifier = "home"
