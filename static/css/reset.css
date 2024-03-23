@@ -21,6 +21,7 @@ html {
      --prebgcolor: #3c3836;
   }
 }
+
 body {
   color: var(--fontcolor);
   background: var(--bgcolor);
