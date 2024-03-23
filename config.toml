@@ -46,7 +46,7 @@ brandIconFile = "new_logo.png"
 dateFmt = "2006-01-02"
 subtitle = "Navi's Personal Blog"
 math = true
-custom_css = ["css/reset.css"]
+custom_css = ["css/reset.css", "css/syntax.css"]
 
   [[params.social]]
   name = "GitHub"
@@ -65,6 +65,8 @@ custom_css = ["css/reset.css"]
   url = "https://matrix.to/#/@navi93:matrix.org"
 
 [markup]
+  [markup.highlight]
+    noclasses = false
   [markup.goldmark]
     [markup.goldmark.extensions]
       [markup.goldmark.extensions.passthrough]

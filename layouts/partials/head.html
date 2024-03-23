@@ -17,8 +17,10 @@
   <link rel="stylesheet" href="{{ "css/reset.css" | relURL }}"/>
   <link rel="stylesheet" href="{{ "css/font.css" | relURL }}"/>
   <link rel="stylesheet" href="{{ "css/smigle.css" | relURL }}"/>
+  <link rel="stylesheet" href="/css/syntax.css"/>
   {{ range .Site.Params.customStylesheets }}
     <link rel="stylesheet" href="{{ . | relURL }}"/>
+
   {{ end }}
   <link rel="apple-touch-icon" sizes="180x180" href="/new_logo.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/new_logo.png">
